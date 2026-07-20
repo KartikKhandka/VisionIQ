@@ -1,0 +1,230 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Backgrounds */
+    --bg: #ffffff; 
+    --bg-2: #f4f4f5; 
+    --surface: rgba(0, 0, 0, 0.03);
+    --surface-2: rgba(0, 0, 0, 0.06);
+    --surface-3: rgba(0, 0, 0, 0.09);
+
+    /* Text */
+    --text: #09090b; 
+    --muted: #71717a; 
+    --muted-2: #a1a1aa; 
+
+    /* Borders */
+    --border-color: rgba(0, 0, 0, 0.08); /* Renamed --border to --border-color for internal use, though shadcn uses --border */
+    --border: 240 5.9% 90%; /* Shadcn border */
+    --border-2: rgba(0, 0, 0, 0.12);
+
+    /* Brand - Candy Apple Red */
+    --red: #FF0800;
+    --red-2: #ff4d46;
+    --red-d: #cc0600;
+    --red-glow: rgba(255, 8, 0, 0.20);
+
+    /* Gradients */
+    --grad-brand: linear-gradient(135deg, var(--red), var(--red-d));
+    --grad-brand-soft: linear-gradient(135deg, rgba(255, 8, 0, 0.15), rgba(204, 6, 0, 0.10));
+    --grad-text: linear-gradient(135deg, #09090b 0%, #71717a 100%);
+    
+    /* Shadows */
+    --shadow: 0 24px 80px rgba(0, 0, 0, 0.1);
+    --shadow-soft: 0 8px 32px rgba(0, 0, 0, 0.05);
+    --shadow-brand: 0 12px 40px rgba(255, 8, 0, 0.15);
+    --shadow-brand-lg: 0 20px 60px rgba(255, 8, 0, 0.25);
+
+    /* Shape */
+    --radius: 16px;
+    --radius-sm: 12px;
+    --radius-xs: 8px;
+    --radius-pill: 999px;
+
+    /* Typography */
+    --font-display: 'Inter', system-ui, sans-serif;
+    --font-body: 'Inter', system-ui, sans-serif;
+
+    /* Transitions */
+    --ease: cubic-bezier(0.16, 1, 0.3, 1);
+    --dur: 0.25s;
+    --dur-slow: 0.45s;
+
+    /* Shadcn/UI */
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    --primary: 3 100% 50%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --input: 240 5.9% 90%;
+    --ring: 3 100% 50%;
+  }
+
+  .dark {
+    /* Backgrounds */
+    --bg: #09090b; 
+    --bg-2: #18181b; 
+    --surface: rgba(255, 255, 255, 0.03);
+    --surface-2: rgba(255, 255, 255, 0.06);
+    --surface-3: rgba(255, 255, 255, 0.09);
+
+    /* Text */
+    --text: #fafafa; 
+    --muted: #a1a1aa; 
+    --muted-2: #71717a; 
+
+    /* Borders */
+    --border-color: rgba(255, 255, 255, 0.08);
+    --border: 0 0% 100% / 0.08; /* Shadcn border */
+    --border-2: rgba(255, 255, 255, 0.12);
+
+    /* Gradients */
+    --grad-text: linear-gradient(135deg, #ffffff 0%, #a1a1aa 100%);
+    
+    /* Shadows */
+    --shadow: 0 24px 80px rgba(0, 0, 0, 0.6);
+    --shadow-soft: 0 8px 32px rgba(0, 0, 0, 0.4);
+    --shadow-brand: 0 12px 40px rgba(255, 8, 0, 0.25);
+    --shadow-brand-lg: 0 20px 60px rgba(255, 8, 0, 0.35);
+
+    /* Shadcn/UI overrides mapping to Candy Apple Theme */
+    --background: 240 10% 4%; 
+    --foreground: 0 0% 98%; 
+    --card: 240 10% 4%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 4%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 3 100% 50%; 
+    --primary-foreground: 0 0% 100%;
+    --secondary: 240 4% 16%; 
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 5% 15%; 
+    --muted-foreground: 240 5% 65%; 
+    --accent: 240 4% 16%; 
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --input: 0 0% 100% / 0.08;
+    --ring: 3 100% 50%; 
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.6;
+    background-color: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+}
+
+/* Ambient background glow */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 800px 800px at 50% -20%, rgba(255, 8, 0, 0.08), transparent 70%),
+    radial-gradient(ellipse 600px 600px at 120% 80%, rgba(255, 8, 0, 0.05), transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Utilities */
+@layer utilities {
+  .text-grad {
+    background: var(--grad-text);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .glass-panel {
+    background: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-soft);
+  }
+}
+
+/* ── VisionIQ Unique Card ──────────────────────── */
+.vision-card {
+  position: relative;
+  border-radius: var(--radius);
+  border: 1px solid var(--border-color); /* Updated to use --border-color */
+  background: var(--surface); /* Updated to use --surface */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.1);
+  transition:
+    transform var(--dur-slow) var(--ease),
+    box-shadow var(--dur-slow) var(--ease),
+    border-color var(--dur-slow) var(--ease);
+  will-change: transform;
+}
+.vision-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-soft);
+  border-color: var(--border-2);
+}
+
+/* Typography styles */
+.h1 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(36px, 5vw, 64px);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+.h2 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(28px, 3.5vw, 42px);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+.h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(18px, 2vw, 24px);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+/* Scroll Hide */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
