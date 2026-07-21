@@ -166,7 +166,7 @@ export default function ScanResultPage() {
   if (isLoading) {
     return (
       <div className="flex h-[60vh] items-center justify-center">
-        <Loader2 className="w-10 h-10 animate-spin text-candyApple" />
+        <Loader2 className="w-10 h-10 animate-spin text-brandAccent" />
       </div>
     );
   }
@@ -240,7 +240,7 @@ export default function ScanResultPage() {
                 {(scan.file_size / (1024 * 1024)).toFixed(2)} MB
               </span>
               {parsed.brands && (
-                <span className="flex items-center font-bold text-candyApple uppercase tracking-wide text-xs">
+                <span className="flex items-center font-bold text-brandAccent uppercase tracking-wide text-xs">
                   {parsed.brands}
                 </span>
               )}
@@ -249,7 +249,7 @@ export default function ScanResultPage() {
         </div>
         
         <div className="flex items-center space-x-3">
-          <div className={`px-3 py-1.5 rounded-full border text-xs font-semibold uppercase tracking-wider flex items-center gap-1.5 ${scan.status === 'completed' ? 'bg-green-500/10 text-green-400 border-green-500/20' : scan.status === 'failed' ? 'bg-red-500/10 text-red-400 border-red-500/20' : 'bg-candyApple/10 text-candyApple border-candyApple/20'}`}>
+          <div className={`px-3 py-1.5 rounded-full border text-xs font-semibold uppercase tracking-wider flex items-center gap-1.5 ${scan.status === 'completed' ? 'bg-green-500/10 text-green-400 border-green-500/20' : scan.status === 'failed' ? 'bg-red-500/10 text-red-400 border-red-500/20' : 'bg-brandAccent/10 text-brandAccent border-brandAccent/20'}`}>
             {scan.status === 'completed' && <CheckCircle2 className="w-3.5 h-3.5" />}
             {scan.status === 'processing' && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
             <span className="capitalize">{scan.status}</span>
@@ -303,11 +303,11 @@ export default function ScanResultPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
-          className="vision-card !bg-candyApple/5 border-candyApple/20 !p-8"
+          className="vision-card !bg-brandAccent/5 border-brandAccent/20 !p-8"
         >
           <div className="flex items-center gap-6">
-            <div className="w-12 h-12 rounded-xl bg-candyApple/20 flex items-center justify-center border border-candyApple/30">
-              <CheckCircle2 className="w-6 h-6 text-candyApple" />
+            <div className="w-12 h-12 rounded-xl bg-brandAccent/20 flex items-center justify-center border border-brandAccent/30">
+              <CheckCircle2 className="w-6 h-6 text-brandAccent" />
             </div>
             <div>
               <h2 className="text-[20px] font-bold text-white mb-1">Appliance Health Assessment</h2>
@@ -337,7 +337,7 @@ export default function ScanResultPage() {
                 disabled={isStartingChat}
                 className="flex items-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full py-1.5 pr-4 pl-1.5 transition-all hover:-translate-y-0.5 text-white"
               >
-                <span className="w-6 h-6 rounded-full bg-candyApple/20 text-candyApple flex items-center justify-center text-xs font-bold">{idx + 1}</span>
+                <span className="w-6 h-6 rounded-full bg-brandAccent/20 text-brandAccent flex items-center justify-center text-xs font-bold">{idx + 1}</span>
                 <span className="text-[13px] font-medium">{q}</span>
               </button>
             ))}
@@ -354,12 +354,12 @@ export default function ScanResultPage() {
           className="glass-panel p-6 rounded-[20px]"
         >
           <div className="flex items-center space-x-3 mb-4">
-            <BookOpen className="w-5 h-5 text-candyApple" />
+            <BookOpen className="w-5 h-5 text-brandAccent" />
             <h3 className="h3 !text-[18px]">Matched Manual{matchedManuals.length > 1 ? "s" : ""}</h3>
           </div>
           <div className="space-y-3">
             {matchedManuals.map((doc: any) => (
-              <div key={doc.id} className="flex items-center justify-between bg-white/[0.03] rounded-xl p-4 border border-white/[0.06] hover:border-candyApple/30 transition-colors">
+              <div key={doc.id} className="flex items-center justify-between bg-white/[0.03] rounded-xl p-4 border border-white/[0.06] hover:border-brandAccent/30 transition-colors">
                 <div>
                   <p className="text-[15px] font-semibold text-white truncate max-w-xs">{doc.title}</p>
                   <div className="flex items-center gap-3 mt-1.5">
@@ -398,7 +398,7 @@ export default function ScanResultPage() {
           </div>
 
           {/* Appliance Identification Card */}
-          <ProfileCard icon={Zap} iconColor="text-candyApple" iconBg="bg-candyApple/10" title="Detected Appliance">
+          <ProfileCard icon={Zap} iconColor="text-brandAccent" iconBg="bg-brandAccent/10" title="Detected Appliance">
             {isProcessing ? (
               <div className="animate-pulse space-y-4">
                 <div className="h-4 bg-white/[0.04] rounded w-3/4"></div>
@@ -416,7 +416,7 @@ export default function ScanResultPage() {
                 </div>
                 <div>
                   <p className="text-xs font-bold text-muted uppercase tracking-wider mb-1.5">Model</p>
-                  <p className="text-lg font-bold text-candyApple font-mono bg-candyApple/5 inline-block px-2 py-1 rounded border border-candyApple/10">{parsed.model || scan.detected_model_number || "—"}</p>
+                  <p className="text-lg font-bold text-brandAccent font-mono bg-brandAccent/5 inline-block px-2 py-1 rounded border border-brandAccent/10">{parsed.model || scan.detected_model_number || "—"}</p>
                 </div>
                 <div>
                   <p className="text-xs font-bold text-muted uppercase tracking-wider mb-1.5">Serial</p>
@@ -482,7 +482,7 @@ export default function ScanResultPage() {
                   return (
                     <div key={idx} className="bg-white/[0.02] border border-border rounded-[14px] p-3.5 flex justify-between items-center hover:bg-white/[0.04] transition-colors hover:border-border-2">
                       <span className="font-semibold text-white">{obj.label}</span>
-                      <span className={`px-2 py-1 rounded text-[11px] font-bold ${percent > 80 ? 'bg-green-500/10 text-green-400 border border-green-500/20' : 'bg-candyApple/10 text-candyApple border border-candyApple/20'}`}>
+                      <span className={`px-2 py-1 rounded text-[11px] font-bold ${percent > 80 ? 'bg-green-500/10 text-green-400 border border-green-500/20' : 'bg-brandAccent/10 text-brandAccent border border-brandAccent/20'}`}>
                         {percent}% Match
                       </span>
                     </div>
@@ -526,7 +526,7 @@ export default function ScanResultPage() {
             <div className="flex justify-end -mt-6 mb-4">
               {scan.ocr_raw_text && (
                 <Button variant="ghost" size="sm" onClick={handleCopyOcr} className="h-8 px-3">
-                  {copiedOcr ? <Check className="w-3.5 h-3.5 mr-1.5 text-candyApple" /> : <Copy className="w-3.5 h-3.5 mr-1.5" />}
+                  {copiedOcr ? <Check className="w-3.5 h-3.5 mr-1.5 text-brandAccent" /> : <Copy className="w-3.5 h-3.5 mr-1.5" />}
                   {copiedOcr ? "Copied" : "Copy"}
                 </Button>
               )}

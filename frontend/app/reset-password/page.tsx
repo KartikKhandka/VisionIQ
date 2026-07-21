@@ -36,10 +36,10 @@ function ResetPasswordForm() {
   return (
     <form className="space-y-5" onSubmit={onSubmit}>
       <div className="space-y-2">
-        <Label htmlFor="password">New Password</Label>
+        <Label htmlFor="password" className="text-[10px] font-bold tracking-widest uppercase text-white/50">New Password</Label>
         <Input id="password" type="password" placeholder="••••••••" value={password} onChange={e => setPassword(e.target.value)} required />
       </div>
-      {status && <p className="text-sm font-medium text-muted-foreground">{status}</p>}
+      {status && <p className="text-[11px] font-bold tracking-widest uppercase text-brandAccent">{status}</p>}
       <div className="pt-2">
         <Button type="submit" className="w-full" disabled={loading || !token}>
           {loading ? "Resetting..." : "Reset Password"}

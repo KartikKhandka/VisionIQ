@@ -34,7 +34,7 @@ export default function ChatInput({ input, setInput, onSubmit, isLoading, disabl
     <div className="bg-transparent p-4 w-full flex justify-center pb-8">
       <form 
         onSubmit={onSubmit}
-        className="w-full max-w-4xl relative flex items-end gap-3 vision-card p-2 !rounded-2xl border-white/10 focus-within:border-candyApple/50 focus-within:ring-1 focus-within:ring-candyApple/50 transition-shadow"
+        className="w-full max-w-4xl relative flex items-end gap-3 vision-card p-2 !rounded-2xl border-white/10 focus-within:border-brandAccent/50 focus-within:ring-1 focus-within:ring-brandAccent/50 transition-shadow"
       >
         <textarea
           ref={textareaRef}
@@ -50,7 +50,7 @@ export default function ChatInput({ input, setInput, onSubmit, isLoading, disabl
         <button
           type="submit"
           disabled={!input.trim() || isLoading || disabled}
-          className="shrink-0 p-2.5 rounded-xl bg-candyApple text-white hover:bg-[#cc0600] disabled:bg-white/5 disabled:text-muted transition-colors mb-0.5"
+          className="shrink-0 p-2.5 rounded-xl bg-brandAccent text-white hover:bg-[#cc0600] disabled:bg-white/5 disabled:text-muted transition-colors mb-0.5"
         >
           <PaperAirplaneIcon className="w-5 h-5" />
         </button>

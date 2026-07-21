@@ -4,12 +4,12 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap text-sm font-semibold transition-all duration-300 ease-in-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-candyApple focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex items-center justify-center whitespace-nowrap text-xs font-bold tracking-[0.1em] uppercase transition-all duration-300 ease-in-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brandAccent focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {
         default:
-          "bg-gradient-to-b from-candyApple to-candyApple-dark text-white rounded-[10px] shadow-[0_4px_14px_rgba(255,8,0,0.35),inset_0_1px_0_rgba(255,255,255,0.2)] hover:shadow-[0_6px_20px_rgba(255,8,0,0.45),inset_0_1px_0_rgba(255,255,255,0.3)] hover:-translate-y-[1px] active:translate-y-[1px] active:shadow-[0_2px_8px_rgba(255,8,0,0.2)]",
+          "bg-gradient-to-b from-brandAccent to-brandAccent-dark text-white rounded-[10px] shadow-[0_4px_14px_rgba(6,182,212,0.35),inset_0_1px_0_rgba(255,255,255,0.2)] hover:shadow-[0_6px_20px_rgba(6,182,212,0.45),inset_0_1px_0_rgba(255,255,255,0.3)] hover:-translate-y-[1px] active:translate-y-[1px] active:shadow-[0_2px_8px_rgba(6,182,212,0.2)]",
         ghost:
           "bg-transparent text-muted hover:text-white hover:bg-white/5 rounded-[10px]",
         outline:
@@ -18,7 +18,7 @@ const buttonVariants = cva(
           "bg-white/[0.08] text-white shadow-sm hover:bg-white/[0.12] rounded-[10px]",
         destructive:
           "bg-red-500 text-white shadow-sm hover:bg-red-600 rounded-[10px]",
-        link: "text-candyApple-light underline-offset-4 hover:underline",
+        link: "text-brandAccent-light underline-offset-4 hover:underline",
       },
       size: {
         default: "h-11 px-6 py-2",

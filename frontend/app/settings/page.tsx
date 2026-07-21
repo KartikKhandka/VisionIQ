@@ -10,7 +10,6 @@ import { api } from "@/services/api";
 
 const tabs = [
   { id: "profile", name: "Profile & Account", icon: User },
-  { id: "preferences", name: "Preferences", icon: Palette },
   { id: "notifications", name: "Notifications", icon: Bell },
   { id: "security", name: "Security", icon: Shield },
 ];
@@ -111,11 +110,11 @@ export default function SettingsPage() {
         animate={{ opacity: 1, y: 0 }}
       >
         <div className="flex items-center gap-2 mb-2">
-          <Settings className="w-5 h-5 text-candyApple" />
-          <span className="text-sm font-bold tracking-wider uppercase text-candyApple">Configuration</span>
+          <Settings className="w-4 h-4 text-brandAccent" />
+          <span className="text-[10px] font-bold tracking-widest uppercase text-brandAccent">Configuration</span>
         </div>
-        <h1 className="text-4xl font-extrabold tracking-tight text-slate-100">Settings</h1>
-        <p className="text-slate-400 mt-2 text-lg font-medium max-w-2xl">
+        <h1 className="h1 text-white">Settings</h1>
+        <p className="text-white/60 mt-3 text-sm max-w-2xl">
           Manage your account settings, preferences, and security configurations.
         </p>
       </motion.div>
@@ -124,18 +123,18 @@ export default function SettingsPage() {
 
       <div className="flex flex-col md:flex-row gap-8">
         {/* Sidebar */}
-        <div className="w-full md:w-64 space-y-1">
+        <div className="w-full md:w-64 space-y-2">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-sm font-bold text-left ${
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-[11px] font-bold tracking-widest uppercase text-left ${
                 activeTab === tab.id
-                  ? "bg-candyApple/10 text-candyApple border border-candyApple/20"
-                  : "text-slate-500 hover:bg-white/[0.04] hover:text-slate-300 border border-transparent"
+                  ? "bg-brandAccent/10 text-brandAccent border border-brandAccent/20"
+                  : "text-white/40 hover:bg-white/5 hover:text-white border border-transparent"
               }`}
             >
-              <tab.icon className="w-5 h-5" />
+              <tab.icon className="w-4 h-4" />
               {tab.name}
             </button>
           ))}
@@ -149,13 +148,13 @@ export default function SettingsPage() {
               animate={{ opacity: 1, x: 0 }}
               className="vision-card p-8 !rounded-2xl space-y-8"
             >
-              <div>
-                <h3 className="text-xl font-bold text-slate-100 mb-1">Profile Information</h3>
-                <p className="text-sm text-slate-400">Update your account details and public profile.</p>
+              <div className="mb-6">
+                <h3 className="h3 text-white mb-1">Profile Information</h3>
+                <p className="text-white/60 text-sm">Update your account details and public profile.</p>
               </div>
               
               <div className="flex items-center gap-6 pb-6 border-b border-white/[0.06]">
-                <div className="w-24 h-24 rounded-full bg-candyApple/20 border-2 border-candyApple/30 flex items-center justify-center text-candyApple text-3xl font-bold">
+                <div className="w-24 h-24 rounded-full bg-brandAccent/20 border-2 border-brandAccent/30 flex items-center justify-center text-brandAccent text-3xl font-bold">
                   {firstName.charAt(0) || "U"}
                 </div>
                 <div>
@@ -205,67 +204,7 @@ export default function SettingsPage() {
             </motion.div>
           )}
 
-          {activeTab === "preferences" && (
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              className="vision-card p-8 !rounded-2xl space-y-8"
-            >
-              <div>
-                <h3 className="text-xl font-bold text-slate-100 mb-1">Theme & Display</h3>
-                <p className="text-sm text-slate-400">Customize how VisionIQ looks and feels on your device.</p>
-              </div>
 
-              {mounted && (
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  <button 
-                    onClick={() => setTheme("dark")}
-                    className={`p-4 rounded-xl border-2 flex flex-col items-center justify-center gap-3 transition-all relative overflow-hidden group ${theme === "dark" ? "border-candyApple bg-candyApple/5" : "border-white/[0.08] hover:border-white/[0.2] bg-white/[0.02]"}`}
-                  >
-                    <div className="w-full h-24 rounded-lg bg-[#09090b] border border-white/10 flex items-center justify-center mb-2 p-2 shadow-inner">
-                       <div className="w-full h-full rounded border border-candyApple/30 bg-black flex flex-col gap-1 p-1">
-                          <div className="w-full h-2 bg-candyApple/20 rounded-sm"></div>
-                          <div className="w-1/2 h-2 bg-white/10 rounded-sm"></div>
-                       </div>
-                    </div>
-                    <span className={`text-sm font-bold flex items-center gap-2 ${theme === "dark" ? "text-slate-100" : "text-slate-400"}`}>
-                      <Moon className="w-4 h-4"/> Dark {theme === "dark" && "(Active)"}
-                    </span>
-                    {theme !== "dark" && <div className="absolute inset-0 border-2 border-candyApple rounded-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>}
-                  </button>
-
-                  <button 
-                    onClick={() => setTheme("light")}
-                    className={`p-4 rounded-xl border-2 flex flex-col items-center justify-center gap-3 transition-all relative overflow-hidden group ${theme === "light" ? "border-candyApple bg-candyApple/5" : "border-white/[0.08] hover:border-white/[0.2] bg-white/[0.02]"}`}
-                  >
-                    <div className="w-full h-24 rounded-lg bg-gray-50 border border-gray-200 flex items-center justify-center mb-2 p-2 shadow-inner opacity-50">
-                       <div className="w-full h-full rounded border border-indigo-200 bg-white flex flex-col gap-1 p-1">
-                          <div className="w-full h-2 bg-indigo-50 rounded-sm"></div>
-                          <div className="w-1/2 h-2 bg-gray-100 rounded-sm"></div>
-                       </div>
-                    </div>
-                    <span className={`text-sm font-bold flex items-center gap-2 ${theme === "light" ? "text-slate-100" : "text-slate-400"}`}>
-                      <Sparkles className="w-4 h-4"/> Light {theme === "light" && "(Active)"}
-                    </span>
-                    {theme !== "light" && <div className="absolute inset-0 border-2 border-candyApple rounded-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>}
-                  </button>
-                  
-                  <button 
-                    onClick={() => setTheme("system")}
-                    className={`p-4 rounded-xl border-2 flex flex-col items-center justify-center gap-3 transition-all relative overflow-hidden group ${theme === "system" ? "border-candyApple bg-candyApple/5" : "border-white/[0.08] hover:border-white/[0.2] bg-white/[0.02]"}`}
-                  >
-                    <div className="w-full h-24 rounded-lg bg-gradient-to-br from-slate-800 to-slate-200 border border-white/10 flex items-center justify-center mb-2 p-2 opacity-50">
-                      <Monitor className="w-8 h-8 text-slate-400" />
-                    </div>
-                    <span className={`text-sm font-bold flex items-center gap-2 ${theme === "system" ? "text-slate-100" : "text-slate-400"}`}>
-                      <Monitor className="w-4 h-4"/> System {theme === "system" && "(Active)"}
-                    </span>
-                    {theme !== "system" && <div className="absolute inset-0 border-2 border-candyApple rounded-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>}
-                  </button>
-                </div>
-              )}
-            </motion.div>
-          )}
 
           {activeTab === "notifications" && (
             <motion.div
@@ -273,9 +212,9 @@ export default function SettingsPage() {
               animate={{ opacity: 1, x: 0 }}
               className="vision-card p-8 !rounded-2xl space-y-6"
             >
-               <div>
-                <h3 className="text-xl font-bold text-slate-100 mb-1">Email Notifications</h3>
-                <p className="text-sm text-slate-400">Choose what you want to be notified about.</p>
+               <div className="mb-6">
+                <h3 className="h3 text-white mb-1">Email Notifications</h3>
+                <p className="text-white/60 text-sm">Choose what you want to be notified about.</p>
               </div>
 
               <div className="space-y-4">
@@ -291,7 +230,7 @@ export default function SettingsPage() {
                     </div>
                     <div 
                       onClick={() => toggleNotif(i)}
-                      className={`w-12 h-6 rounded-full transition-colors cursor-pointer relative ${notifs[i] ? 'bg-candyApple' : 'bg-white/10'}`}
+                      className={`w-12 h-6 rounded-full transition-colors cursor-pointer relative ${notifs[i] ? 'bg-brandAccent' : 'bg-white/10'}`}
                     >
                       <div className={`absolute top-1 w-4 h-4 rounded-full bg-white transition-transform ${notifs[i] ? 'translate-x-7' : 'translate-x-1'}`}></div>
                     </div>
@@ -307,9 +246,9 @@ export default function SettingsPage() {
               animate={{ opacity: 1, x: 0 }}
               className="vision-card p-8 !rounded-2xl space-y-8"
             >
-              <div>
-                <h3 className="text-xl font-bold text-slate-100 mb-1">Security Settings</h3>
-                <p className="text-sm text-slate-400">Manage your password and security keys.</p>
+              <div className="mb-6">
+                <h3 className="h3 text-white mb-1">Security Settings</h3>
+                <p className="text-white/60 text-sm">Manage your password and security keys.</p>
               </div>
 
               <div className="space-y-4">
@@ -348,7 +287,7 @@ export default function SettingsPage() {
               <div className="pt-4 flex justify-end">
                 <button 
                   onClick={handleUpdatePassword}
-                  className="px-6 py-2.5 rounded-xl border border-candyApple text-candyApple font-bold text-sm hover:bg-candyApple/10 transition-colors"
+                  className="px-6 py-2.5 rounded-xl border border-brandAccent text-brandAccent font-bold text-sm hover:bg-brandAccent/10 transition-colors"
                 >
                   Update Password
                 </button>

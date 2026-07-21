@@ -24,22 +24,22 @@ export default function RegisterPage() {
     <AuthLayout title="Create an account" subtitle="Start using VisionIQ today">
       <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
         <div className="space-y-2">
-          <Label htmlFor="username">Username</Label>
+          <Label htmlFor="username" className="text-[10px] font-bold tracking-widest uppercase text-white/50">Username</Label>
           <Input id="username" type="text" placeholder="johndoe" {...register('username')} />
           {errors.username && <p className="text-sm text-destructive">{errors.username.message?.toString()}</p>}
         </div>
         <div className="space-y-2">
-          <Label htmlFor="full_name">Full Name</Label>
+          <Label htmlFor="full_name" className="text-[10px] font-bold tracking-widest uppercase text-white/50">Full Name</Label>
           <Input id="full_name" type="text" placeholder="John Doe" {...register('full_name')} />
           {errors.full_name && <p className="text-sm text-destructive">{errors.full_name.message?.toString()}</p>}
         </div>
         <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
+          <Label htmlFor="email" className="text-[10px] font-bold tracking-widest uppercase text-white/50">Email Address</Label>
           <Input id="email" type="email" placeholder="name@example.com" {...register('email')} />
           {errors.email && <p className="text-sm text-destructive">{errors.email.message?.toString()}</p>}
         </div>
         <div className="space-y-2">
-          <Label htmlFor="password">Password</Label>
+          <Label htmlFor="password" className="text-[10px] font-bold tracking-widest uppercase text-white/50">Password</Label>
           <Input id="password" type="password" placeholder="••••••••" {...register('password')} />
           {errors.password && <p className="text-sm text-destructive">{errors.password.message?.toString()}</p>}
         </div>
@@ -49,9 +49,9 @@ export default function RegisterPage() {
           </Button>
         </div>
       </form>
-      <div className="mt-6 text-center text-sm text-muted-foreground">
+      <div className="mt-6 text-center text-[11px] font-bold tracking-widest uppercase text-white/40">
         Already have an account?{' '}
-        <Link href="/login" className="font-medium text-primary hover:underline transition-colors">
+        <Link href="/login" className="text-brandAccent hover:text-brandAccent-light transition-colors ml-1">
           Sign in
         </Link>
       </div>

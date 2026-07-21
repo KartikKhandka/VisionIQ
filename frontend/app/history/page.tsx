@@ -32,11 +32,11 @@ function HistoryContent() {
       >
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <Clock className="w-5 h-5 text-candyApple" />
-            <span className="text-sm font-bold tracking-wider uppercase text-candyApple">Archive</span>
+            <Clock className="w-4 h-4 text-brandAccent" />
+            <span className="text-[10px] font-bold tracking-widest uppercase text-brandAccent">Archive</span>
           </div>
-          <h1 className="text-4xl font-extrabold tracking-tight text-white">Scan History</h1>
-          <p className="text-muted mt-2 text-lg font-medium max-w-2xl">
+          <h1 className="h1 text-white">Scan History</h1>
+          <p className="text-white/60 mt-3 text-sm max-w-2xl">
             View, search, and manage all your previously analyzed images and conversations.
           </p>
         </div>
@@ -54,17 +54,17 @@ function HistoryContent() {
 
       {isLoading ? (
         <div className="flex flex-col items-center justify-center py-32 space-y-4">
-          <Loader2 className="w-10 h-10 animate-spin text-candyApple" />
+          <Loader2 className="w-10 h-10 animate-spin text-brandAccent" />
           <p className="text-muted font-medium animate-pulse">Loading your history...</p>
         </div>
       ) : error ? (
-        <div className="bg-candyApple/10 border border-candyApple/20 rounded-3xl p-8 text-center max-w-lg mx-auto">
-          <div className="w-12 h-12 bg-candyApple/20 rounded-full flex items-center justify-center mx-auto mb-4">
+        <div className="bg-brandAccent/10 border border-brandAccent/20 rounded-3xl p-8 text-center max-w-lg mx-auto">
+          <div className="w-12 h-12 bg-brandAccent/20 rounded-full flex items-center justify-center mx-auto mb-4">
             <span className="text-xl">⚠️</span>
           </div>
-          <h3 className="text-lg font-bold text-candyApple mb-2">Failed to load history</h3>
-          <p className="text-candyApple/80 mb-6">There was a problem fetching your previous scans. Please try again.</p>
-          <Button variant="outline" className="border-candyApple/20 text-candyApple hover:bg-candyApple/10" onClick={() => window.location.reload()}>
+          <h3 className="text-lg font-bold text-brandAccent mb-2">Failed to load history</h3>
+          <p className="text-brandAccent/80 mb-6">There was a problem fetching your previous scans. Please try again.</p>
+          <Button variant="outline" className="border-brandAccent/20 text-brandAccent hover:bg-brandAccent/10" onClick={() => window.location.reload()}>
             Retry
           </Button>
         </div>
@@ -106,7 +106,7 @@ export default function HistoryPage() {
   return (
     <Suspense fallback={
       <div className="flex flex-col items-center justify-center py-32 space-y-4">
-        <Loader2 className="w-10 h-10 animate-spin text-candyApple" />
+        <Loader2 className="w-10 h-10 animate-spin text-brandAccent" />
         <p className="text-muted font-medium animate-pulse">Loading...</p>
       </div>
     }>

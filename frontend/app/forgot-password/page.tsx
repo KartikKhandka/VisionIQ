@@ -30,19 +30,19 @@ export default function ForgotPasswordPage() {
     <AuthLayout title="Forgot Password" subtitle="Enter your email to receive a reset link">
       <form className="space-y-5" onSubmit={onSubmit}>
         <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
+          <Label htmlFor="email" className="text-[10px] font-bold tracking-widest uppercase text-white/50">Email Address</Label>
           <Input id="email" type="email" placeholder="name@example.com" value={email} onChange={e => setEmail(e.target.value)} required />
         </div>
-        {status && <p className="text-sm font-medium text-muted-foreground">{status}</p>}
+        {status && <p className="text-[11px] font-bold tracking-widest uppercase text-brandAccent">{status}</p>}
         <div className="pt-2">
           <Button type="submit" className="w-full" disabled={loading}>
             {loading ? "Sending..." : "Send Reset Link"}
           </Button>
         </div>
       </form>
-      <div className="mt-6 text-center text-sm text-muted-foreground">
+      <div className="mt-6 text-center text-[11px] font-bold tracking-widest uppercase text-white/40">
         Remembered your password?{' '}
-        <Link href="/login" className="font-medium text-primary hover:underline transition-colors">
+        <Link href="/login" className="text-brandAccent hover:text-brandAccent-light transition-colors ml-1">
           Sign in
         </Link>
       </div>

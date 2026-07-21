@@ -44,19 +44,19 @@ export default function KnowledgeBasePage() {
           >
             <div>
               <div className="flex items-center gap-2 mb-2">
-                <Library className="w-5 h-5 text-indigo-400" />
-                <span className="text-sm font-bold tracking-wider uppercase text-indigo-400">Library</span>
+                <Library className="w-4 h-4 text-brandAccent" />
+                <span className="text-[10px] font-bold tracking-widest uppercase text-brandAccent">Library</span>
               </div>
-              <h1 className="text-4xl font-extrabold tracking-tight text-slate-100">Knowledge Base</h1>
-              <p className="text-slate-500 mt-2 text-lg font-medium max-w-2xl">
+              <h1 className="h1 text-white">Knowledge Base</h1>
+              <p className="text-white/60 mt-3 text-sm max-w-2xl">
                 Upload manuals, specifications, and guides. VisionIQ will use these documents to answer your questions accurately.
               </p>
             </div>
             
             <div className="flex items-center gap-3">
-              <div className="hidden md:flex items-center gap-2 px-4 py-2 glass-card">
-                <Database className="w-4 h-4 text-emerald-400" />
-                <span className="text-sm font-bold text-slate-300">{documents.length} Docs Indexed</span>
+              <div className="hidden md:flex items-center gap-2 px-4 py-2 vision-card bg-brandAccent/10 border-brandAccent/20">
+                <Database className="w-4 h-4 text-brandAccent" />
+                <span className="text-[10px] font-bold tracking-widest uppercase text-brandAccent">{documents.length} Docs Indexed</span>
               </div>
               <Link href="/dashboard">
                 <Button variant="outline" className="bg-white/[0.04] border-white/[0.08] text-slate-300 hover:bg-white/[0.06] rounded-xl shadow-sm h-10">
@@ -76,25 +76,25 @@ export default function KnowledgeBasePage() {
               transition={{ delay: 0.2 }}
               className="lg:col-span-5 space-y-6"
             >
-              <div className="glass-card-hover p-6">
+              <div className="vision-card p-6">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 rounded-full bg-indigo-500/10 flex items-center justify-center">
-                    <FileText className="w-5 h-5 text-indigo-400" />
+                  <div className="w-10 h-10 rounded-full bg-brandAccent/10 flex items-center justify-center border border-brandAccent/20">
+                    <FileText className="w-5 h-5 text-brandAccent" />
                   </div>
                   <div>
-                    <h2 className="text-lg font-bold text-slate-200">Add Documents</h2>
-                    <p className="text-sm text-slate-500">Supported: PDF, TXT, MD</p>
+                    <h2 className="h3 text-white">Add Documents</h2>
+                    <p className="text-[11px] font-bold tracking-widest uppercase text-white/40 mt-1">Supported: PDF, TXT, MD</p>
                   </div>
                 </div>
                 <KnowledgeUploader onUploadSuccess={fetchDocuments} />
               </div>
               
-              <div className="bg-gradient-to-br from-indigo-600/20 to-purple-600/20 border border-indigo-500/20 rounded-3xl p-6 relative overflow-hidden group">
+              <div className="bg-brandAccent/5 border border-brandAccent/20 rounded-3xl p-6 relative overflow-hidden group shadow-[0_0_30px_rgba(6,182,212,0.1)]">
                 <div className="absolute top-0 right-0 p-6 opacity-[0.05] group-hover:opacity-[0.1] transition-opacity">
-                  <Database className="w-24 h-24" />
+                  <Database className="w-24 h-24 text-brandAccent" />
                 </div>
-                <h3 className="text-xl font-bold mb-2 relative z-10 text-slate-200">How it works</h3>
-                <p className="text-slate-400 text-sm leading-relaxed relative z-10 mb-4">
+                <h3 className="h3 mb-2 relative z-10 text-white">How it works</h3>
+                <p className="text-white/60 text-sm leading-relaxed relative z-10 mb-4">
                   When you upload a document, we break it down into semantic chunks and store them in our vector database. 
                   When you chat about an image, the AI will search these documents to provide accurate, cited answers.
                 </p>
@@ -108,10 +108,10 @@ export default function KnowledgeBasePage() {
               transition={{ delay: 0.3 }}
               className="lg:col-span-7"
             >
-              <div className="glass-card p-6 min-h-[500px]">
+              <div className="vision-card p-6 min-h-[500px]">
                 <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-xl font-bold text-slate-200">Indexed Documents</h2>
-                  <div className="text-sm font-medium text-slate-500 bg-white/[0.04] px-3 py-1 rounded-full border border-white/[0.06]">
+                  <h2 className="h3 text-white">Indexed Documents</h2>
+                  <div className="text-[10px] font-bold tracking-widest uppercase text-white/40 bg-white/[0.04] px-3 py-1 rounded-full border border-white/[0.06]">
                     {isLoading ? 'Loading...' : `${documents.length} items`}
                   </div>
                 </div>

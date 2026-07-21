@@ -43,11 +43,11 @@ const config: Config = {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
-        // VisionIQ Unique Theme
-        candyApple: {
-          DEFAULT: "#FF0800",
-          light: "#ff4d46",
-          dark: "#cc0600",
+        // VisionIQ Unique Theme (Matches the Teal/Cyan Logo)
+        brandAccent: {
+          DEFAULT: "#06b6d4", // Cyan 500
+          light: "#22d3ee",   // Cyan 400
+          dark: "#0891b2",    // Cyan 600
         },
       },
       borderRadius: {
@@ -55,9 +55,15 @@ const config: Config = {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+      fontFamily: {
+        display: ['var(--font-barlow-condensed)', 'Arial Narrow', 'sans-serif'],
+        body: ['var(--font-barlow)', 'Helvetica Neue', 'sans-serif'],
+        mono: ['var(--font-jetbrains-mono)', 'monospace'],
+      },
       transitionTimingFunction: {
         'vision': 'cubic-bezier(0.16, 1, 0.3, 1)',
         'vision-bounce': 'cubic-bezier(0.34, 1.56, 0.64, 1)',
+        'ease-out-expo': 'cubic-bezier(0.16, 1, 0.3, 1)',
       },
       keyframes: {
         "fade-up": {
@@ -87,6 +93,26 @@ const config: Config = {
           "0%": { backgroundPosition: "-400px 0" },
           "100%": { backgroundPosition: "400px 0" },
         },
+        "marquee": {
+          "from": { transform: "translateX(0)" },
+          "to": { transform: "translateX(-50%)" },
+        },
+        "fillBar": {
+          "from": { width: "0%" },
+          "to": { width: "var(--tw-fill, 100%)" },
+        },
+        "ringFill": {
+          "from": { strokeDashoffset: "220" },
+          "to": { strokeDashoffset: "var(--dt, 55)" },
+        },
+        "scanLine": {
+          "0%, 100%": { top: "10%" },
+          "50%": { top: "80%" },
+        },
+        "pulse-glow": {
+          "0%, 100%": { opacity: "1", transform: "scale(1)" },
+          "50%": { opacity: "0.5", transform: "scale(1.3)" },
+        }
       },
       animation: {
         "fade-up": "fade-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards",
@@ -95,7 +121,12 @@ const config: Config = {
         "slide-right": "slide-right 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards",
         "count-up": "count-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards",
         "draw-path": "draw-path 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards",
-        shimmer: "shimmer 2s infinite linear",
+        "shimmer": "shimmer 2s infinite linear",
+        "marquee": "marquee 35s linear infinite",
+        "fill-bar": "fillBar 900ms cubic-bezier(0.16, 1, 0.3, 1) forwards",
+        "ring-fill": "ringFill 1000ms cubic-bezier(0.16, 1, 0.3, 1) forwards",
+        "scan-line": "scanLine 2s ease-in-out infinite",
+        "pulse-glow": "pulse-glow 2s infinite",
       },
     },
   },

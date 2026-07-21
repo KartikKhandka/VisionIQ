@@ -10,24 +10,26 @@ export default function ProfilePage() {
   if (!user) return <div className="p-8">Not authenticated</div>;
 
   return (
-    <div className="p-8">
-      <h1 className="text-3xl font-bold mb-6">User Profile</h1>
-      <div className="bg-card border border-border p-6 rounded-lg shadow-sm space-y-4 max-w-xl">
+    <div className="p-8 max-w-xl mx-auto space-y-8 mt-4 pb-20">
+      <h1 className="h1 text-white">User Profile</h1>
+      <div className="vision-card p-8 space-y-6">
         <div>
-          <h3 className="text-sm font-medium text-muted-foreground">Full Name</h3>
-          <p className="text-lg">{user.full_name || 'N/A'}</p>
+          <h3 className="text-[10px] font-bold tracking-widest uppercase text-brandAccent mb-1">Full Name</h3>
+          <p className="text-xl font-bold text-white">{user.full_name || 'N/A'}</p>
         </div>
+        <div className="h-px bg-white/5" />
         <div>
-          <h3 className="text-sm font-medium text-muted-foreground">Email</h3>
-          <p className="text-lg">{user.email}</p>
+          <h3 className="text-[10px] font-bold tracking-widest uppercase text-brandAccent mb-1">Email</h3>
+          <p className="text-xl font-bold text-white">{user.email}</p>
         </div>
+        <div className="h-px bg-white/5" />
         <div>
-          <h3 className="text-sm font-medium text-muted-foreground">Account Created</h3>
-          <p className="text-lg">{new Date(user.created_at).toLocaleDateString()}</p>
+          <h3 className="text-[10px] font-bold tracking-widest uppercase text-brandAccent mb-1">Account Created</h3>
+          <p className="text-xl font-bold text-white">{new Date(user.created_at).toLocaleDateString()}</p>
         </div>
         
-        <div className="pt-4 border-t border-border">
-          <Button className="bg-destructive text-destructive-foreground hover:bg-destructive/90" onClick={() => logout()}>Logout</Button>
+        <div className="pt-6 border-t border-white/10 mt-4">
+          <Button variant="destructive" onClick={() => logout()}>Logout</Button>
         </div>
       </div>
     </div>

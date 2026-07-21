@@ -18,7 +18,7 @@ const mockTimeData = [
 ]
 
 const mockTypeData = [
-  { name: 'Images', value: 75, color: '#FF0800' },
+  { name: 'Images', value: 75, color: '#06b6d4' },
   { name: 'PDFs', value: 25, color: '#71717a' },
 ]
 
@@ -45,11 +45,11 @@ export default function DashboardPage() {
         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
         className="flex flex-col items-start text-left mb-8"
       >
-        <span className="text-[11px] font-bold text-candyApple uppercase tracking-[0.2em] mb-2 px-2 py-1 bg-candyApple/10 rounded-md border border-candyApple/20">
+        <span className="text-[10px] font-bold text-brandAccent uppercase tracking-widest mb-2">
           Overview
         </span>
-        <h1 className="h1">Dashboard</h1>
-        <p className="text-muted mt-3 text-[17px]">Welcome back to VisionIQ. Here is an overview of your workspace.</p>
+        <h1 className="h1 text-white">Dashboard</h1>
+        <p className="text-white/60 mt-3 text-sm">Welcome back to VisionIQ. Here is an overview of your workspace.</p>
       </motion.div>
 
       {/* Top Stats Bento Grid */}
@@ -69,7 +69,7 @@ export default function DashboardPage() {
             className="vision-card p-6 relative overflow-hidden group"
           >
             <div className="absolute top-0 right-0 p-6 opacity-[0.05] group-hover:opacity-[0.10] transition-opacity">
-              <stat.icon className="w-16 h-16 text-candyApple" />
+              <stat.icon className="w-16 h-16 text-brandAccent" />
             </div>
             <p className="text-[12px] font-semibold text-muted mb-2 uppercase tracking-wider">{stat.label}</p>
             <div className="flex items-baseline gap-2">
@@ -78,7 +78,7 @@ export default function DashboardPage() {
                 {stat.unit && <span className="text-lg text-muted font-medium ml-1">{stat.unit}</span>}
               </h2>
               {stat.change && (
-                <span className="flex items-center text-[11px] font-bold text-candyApple bg-candyApple/10 px-2.5 py-0.5 rounded-full border border-candyApple/20">
+                <span className="flex items-center text-[11px] font-bold text-brandAccent bg-brandAccent/10 px-2.5 py-0.5 rounded-full border border-brandAccent/20">
                   <ArrowUpRight className="w-3 h-3 mr-0.5" /> {stat.change}
                 </span>
               )}
@@ -100,8 +100,8 @@ export default function DashboardPage() {
               <h3 className="h3 text-white">Uploads Over Time</h3>
               <p className="text-[14px] text-muted mt-1">Activity for the past 7 days</p>
             </div>
-            <div className="w-10 h-10 rounded-[10px] bg-candyApple/10 flex items-center justify-center border border-candyApple/20">
-              <TrendingUp className="w-5 h-5 text-candyApple-light" />
+            <div className="w-10 h-10 rounded-[10px] bg-brandAccent/10 flex items-center justify-center border border-brandAccent/20">
+              <TrendingUp className="w-5 h-5 text-brandAccent-light" />
             </div>
           </div>
           <div className="h-[250px] w-full">
@@ -109,8 +109,8 @@ export default function DashboardPage() {
               <AreaChart data={mockTimeData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                 <defs>
                   <linearGradient id="colorUploads" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#FF0800" stopOpacity={0.4} />
-                    <stop offset="95%" stopColor="#FF0800" stopOpacity={0} />
+                    <stop offset="5%" stopColor="#06b6d4" stopOpacity={0.4} />
+                    <stop offset="95%" stopColor="#06b6d4" stopOpacity={0} />
                   </linearGradient>
                 </defs>
                 <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#71717a' }} dy={10} />
@@ -118,7 +118,7 @@ export default function DashboardPage() {
                 <Tooltip 
                   contentStyle={{ borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', background: '#09090b', color: '#fafafa', boxShadow: '0 8px 32px rgba(0,0,0,0.5)' }} 
                 />
-                <Area type="monotone" dataKey="uploads" stroke="#FF0800" strokeWidth={3} fillOpacity={1} fill="url(#colorUploads)" />
+                <Area type="monotone" dataKey="uploads" stroke="#06b6d4" strokeWidth={3} fillOpacity={1} fill="url(#colorUploads)" />
               </AreaChart>
             </ResponsiveContainer>
           </div>
@@ -188,7 +188,7 @@ export default function DashboardPage() {
         
         {isLoading ? (
           <div className="flex justify-center py-12">
-            <Loader2 className="w-8 h-8 animate-spin text-candyApple" />
+            <Loader2 className="w-8 h-8 animate-spin text-brandAccent" />
           </div>
         ) : error ? (
           <div className="text-red-400 bg-red-500/10 border border-red-500/20 p-4 rounded-xl font-medium">

@@ -1,10 +1,27 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Barlow, Barlow_Condensed, JetBrains_Mono } from "next/font/google";
 import "@/styles/globals.css";
 import { Providers } from "@/components/providers";
 import { Toaster } from "react-hot-toast";
+import { CustomCursor } from "@/components/ui/custom-cursor";
 
-const inter = Inter({ subsets: ["latin"] });
+const barlow = Barlow({ 
+  weight: ['400', '500', '600', '700'],
+  subsets: ["latin"],
+  variable: '--font-barlow'
+});
+
+const barlowCondensed = Barlow_Condensed({ 
+  weight: ['700', '800', '900'],
+  subsets: ["latin"],
+  variable: '--font-barlow-condensed'
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  weight: ['500', '600', '700'],
+  subsets: ["latin"],
+  variable: '--font-jetbrains-mono'
+});
 
 export const metadata: Metadata = {
   title: "VisionIQ",
@@ -18,7 +35,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
+      <body className={`${barlow.variable} ${barlowCondensed.variable} ${jetbrainsMono.variable} font-body`}>
+        <CustomCursor />
         <Providers>
           {children}
           <Toaster 

@@ -60,7 +60,7 @@ const CodeBlock = ({ inline, className, children, ...props }: any) => {
   }
 
   return (
-    <code {...props} className="bg-white/10 px-1.5 py-0.5 rounded-md text-candyApple font-mono text-sm border border-white/10">
+    <code {...props} className="bg-white/10 px-1.5 py-0.5 rounded-md text-brandAccent font-mono text-sm border border-white/10">
       {children}
     </code>
   );
@@ -103,7 +103,7 @@ export default function ChatArea({ messages, isLoading, streamingMessage }: Chat
           remarkPlugins={[remarkGfm]}
           components={{
             code: CodeBlock,
-            a: ({ node, ...props }) => <a {...props} className="text-candyApple hover:text-[#cc0600] underline decoration-candyApple/30 hover:decoration-candyApple/60 transition-colors" target="_blank" rel="noopener noreferrer" />,
+            a: ({ node, ...props }) => <a {...props} className="text-brandAccent hover:text-[#cc0600] underline decoration-brandAccent/30 hover:decoration-brandAccent/60 transition-colors" target="_blank" rel="noopener noreferrer" />,
             table: ({ node, ...props }) => (
               <div className="overflow-x-auto my-6 rounded-lg border border-white/10 shadow-sm">
                 <table {...props} className="min-w-full divide-y divide-white/10 text-sm" />
@@ -112,7 +112,7 @@ export default function ChatArea({ messages, isLoading, streamingMessage }: Chat
             th: ({ node, ...props }) => <th {...props} className="bg-white/5 px-4 py-3 text-left font-semibold text-white" />,
             td: ({ node, ...props }) => <td {...props} className="px-4 py-3 border-t border-white/5 text-gray-300" />,
             blockquote: ({ node, ...props }) => (
-              <blockquote {...props} className="border-l-4 border-candyApple/30 pl-4 py-1 my-4 italic text-gray-400 bg-candyApple/5 rounded-r-lg" />
+              <blockquote {...props} className="border-l-4 border-brandAccent/30 pl-4 py-1 my-4 italic text-gray-400 bg-brandAccent/5 rounded-r-lg" />
             )
           }}
         >
@@ -122,7 +122,7 @@ export default function ChatArea({ messages, isLoading, streamingMessage }: Chat
         {citations && citations.length > 0 && (
           <div className="mt-8 pt-4 border-t border-white/10 w-full space-y-3">
             <h4 className="text-sm font-semibold text-white flex items-center gap-2">
-              <BookOpen className="w-4 h-4 text-candyApple" />
+              <BookOpen className="w-4 h-4 text-brandAccent" />
               Sources
             </h4>
             <div className="flex flex-col gap-3">
@@ -165,8 +165,8 @@ export default function ChatArea({ messages, isLoading, streamingMessage }: Chat
             animate={{ opacity: 1, scale: 1 }}
             className="flex flex-col items-center justify-center h-[60vh] text-center space-y-6"
           >
-            <div className="w-20 h-20 bg-candyApple/10 rounded-[20px] flex items-center justify-center border border-candyApple/20">
-              <Sparkles className="w-10 h-10 text-candyApple" />
+            <div className="w-20 h-20 bg-brandAccent/10 rounded-[20px] flex items-center justify-center border border-brandAccent/20">
+              <Sparkles className="w-10 h-10 text-brandAccent" />
             </div>
             <div className="space-y-2">
               <h2 className="text-2xl font-bold text-white">Welcome to VisionIQ</h2>
@@ -185,13 +185,13 @@ export default function ChatArea({ messages, isLoading, streamingMessage }: Chat
                 transition={{ duration: 0.3 }}
                 className={`flex gap-5 p-5 rounded-2xl group ${
                   msg.role === 'user' 
-                    ? 'vision-card !bg-candyApple/5 border-candyApple/20 ml-auto max-w-[85%]' 
+                    ? 'vision-card !bg-brandAccent/5 border-brandAccent/20 ml-auto max-w-[85%]' 
                     : 'bg-transparent hover:bg-white/[0.02] transition-colors w-full'
                 }`}
               >
                 {msg.role !== 'user' && (
                   <div className="shrink-0">
-                    <div className="w-9 h-9 rounded-xl bg-candyApple/10 border border-candyApple/20 flex items-center justify-center text-candyApple">
+                    <div className="w-9 h-9 rounded-xl bg-brandAccent/10 border border-brandAccent/20 flex items-center justify-center text-brandAccent">
                       <Sparkles className="w-5 h-5" />
                     </div>
                   </div>
@@ -211,7 +211,7 @@ export default function ChatArea({ messages, isLoading, streamingMessage }: Chat
                     {msg.role !== 'user' && (
                       <button 
                         onClick={() => copyToClipboard(msg.content, msg.id)}
-                        className="flex items-center gap-1.5 px-2 py-1 bg-white/5 border border-white/10 rounded-md text-xs font-medium text-muted hover:text-candyApple hover:border-candyApple/30 transition-all"
+                        className="flex items-center gap-1.5 px-2 py-1 bg-white/5 border border-white/10 rounded-md text-xs font-medium text-muted hover:text-brandAccent hover:border-brandAccent/30 transition-all"
                       >
                         {copiedId === msg.id ? <Check className="w-3.5 h-3.5 text-green-500" /> : <Copy className="w-3.5 h-3.5" />}
                         {copiedId === msg.id ? 'Copied' : 'Copy'}
@@ -243,14 +243,14 @@ export default function ChatArea({ messages, isLoading, streamingMessage }: Chat
                 className="flex gap-5 p-5 rounded-2xl bg-transparent w-full"
               >
                 <div className="shrink-0">
-                  <div className="w-9 h-9 rounded-xl bg-candyApple/10 flex items-center justify-center text-candyApple border border-candyApple/20 relative">
+                  <div className="w-9 h-9 rounded-xl bg-brandAccent/10 flex items-center justify-center text-brandAccent border border-brandAccent/20 relative">
                     <Sparkles className="w-5 h-5" />
-                    <div className="absolute inset-0 bg-candyApple/20 rounded-xl animate-pulse"></div>
+                    <div className="absolute inset-0 bg-brandAccent/20 rounded-xl animate-pulse"></div>
                   </div>
                 </div>
                 <div className="flex-1 min-w-0 prose prose-invert max-w-none text-gray-300">
                   {renderMessageContent(streamingMessage)}
-                  <span className="inline-block w-2 h-4 ml-1 bg-candyApple animate-pulse align-middle rounded-sm"></span>
+                  <span className="inline-block w-2 h-4 ml-1 bg-brandAccent animate-pulse align-middle rounded-sm"></span>
                 </div>
               </motion.div>
             )}
@@ -263,14 +263,14 @@ export default function ChatArea({ messages, isLoading, streamingMessage }: Chat
                 className="flex gap-5 p-5 w-full"
               >
                 <div className="shrink-0">
-                  <div className="w-9 h-9 rounded-xl bg-candyApple/10 flex items-center justify-center text-candyApple border border-candyApple/20">
+                  <div className="w-9 h-9 rounded-xl bg-brandAccent/10 flex items-center justify-center text-brandAccent border border-brandAccent/20">
                     <Sparkles className="w-5 h-5 animate-spin-slow" />
                   </div>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <div className="w-2 h-2 bg-candyApple/50 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-                  <div className="w-2 h-2 bg-candyApple/50 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
-                  <div className="w-2 h-2 bg-candyApple/50 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                  <div className="w-2 h-2 bg-brandAccent/50 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                  <div className="w-2 h-2 bg-brandAccent/50 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                  <div className="w-2 h-2 bg-brandAccent/50 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
                 </div>
               </motion.div>
             )}

@@ -24,14 +24,14 @@ export default function LoginPage() {
     <AuthLayout title="Welcome back" subtitle="Sign in to your account to continue">
       <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
         <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
+          <Label htmlFor="email" className="text-[10px] font-bold tracking-widest uppercase text-white/50">Email Address</Label>
           <Input id="email" type="email" placeholder="name@example.com" {...register('email')} />
           {errors.email && <p className="text-sm text-destructive">{errors.email.message?.toString()}</p>}
         </div>
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <Label htmlFor="password">Password</Label>
-            <Link href="/forgot-password" className="text-sm font-medium text-primary hover:underline hover:text-primary/80 transition-colors">
+            <Label htmlFor="password" className="text-[10px] font-bold tracking-widest uppercase text-white/50">Password</Label>
+            <Link href="/forgot-password" className="text-[10px] font-bold tracking-widest uppercase text-brandAccent hover:text-brandAccent-light transition-colors">
               Forgot password?
             </Link>
           </div>
@@ -44,9 +44,9 @@ export default function LoginPage() {
           </Button>
         </div>
       </form>
-      <div className="mt-6 text-center text-sm text-muted-foreground">
+      <div className="mt-6 text-center text-[11px] font-bold tracking-widest uppercase text-white/40">
         Don&apos;t have an account?{' '}
-        <Link href="/register" className="font-medium text-primary hover:underline transition-colors">
+        <Link href="/register" className="text-brandAccent hover:text-brandAccent-light transition-colors ml-1">
           Sign up
         </Link>
       </div>
