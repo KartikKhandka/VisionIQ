@@ -12,7 +12,7 @@ class OpenAIEmbeddingProvider(EmbeddingProvider):
 
 class GeminiEmbeddingProvider(EmbeddingProvider):
     def __init__(self):
-        self.client = genai.Client(api_key=settings.GOOGLE_API_KEY)
+        self.client = genai.Client(api_key=settings.GOOGLE_API_KEY, http_options={'api_version': 'v1'})
         self.model_name = "text-embedding-004"
 
     def generate_embedding(self, text: str) -> List[float]:
