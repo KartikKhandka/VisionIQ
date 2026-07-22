@@ -18,7 +18,7 @@ class GeminiEmbeddingProvider(EmbeddingProvider):
         self.model_name = "models/text-embedding-004"
 
     def generate_embedding(self, text: str) -> List[float]:
-        url = f"https://generativelanguage.googleapis.com/v1beta/{self.model_name}:embedContent?key={self.api_key}"
+        url = f"https://generativelanguage.googleapis.com/v1/{self.model_name}:embedContent?key={self.api_key}"
         payload = {
             "model": self.model_name,
             "content": {"parts": [{"text": text}]}
@@ -30,7 +30,7 @@ class GeminiEmbeddingProvider(EmbeddingProvider):
         return response.json()["embedding"]["values"]
 
     def generate_embeddings(self, texts: List[str]) -> List[List[float]]:
-        url = f"https://generativelanguage.googleapis.com/v1beta/{self.model_name}:batchEmbedContents?key={self.api_key}"
+        url = f"https://generativelanguage.googleapis.com/v1/{self.model_name}:batchEmbedContents?key={self.api_key}"
         requests = [
             {"model": self.model_name, "content": {"parts": [{"text": t}]}}
             for t in texts
