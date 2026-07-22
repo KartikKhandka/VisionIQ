@@ -1,9 +1,8 @@
 import React, { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { DocumentArrowUpIcon } from '@heroicons/react/24/outline';
 import { knowledgeApi } from '@/lib/api';
 import toast from 'react-hot-toast';
-import { Loader2 } from 'lucide-react';
+import { Loader2, UploadCloud, FileText } from 'lucide-react';
 
 interface KnowledgeUploaderProps {
   onUploadSuccess: () => void;
@@ -53,40 +52,40 @@ export default function KnowledgeUploader({ onUploadSuccess }: KnowledgeUploader
     <div className="w-full">
       <div 
         {...getRootProps()} 
-        className={`border-2 border-dashed rounded-2xl p-8 text-center cursor-pointer transition-all duration-300 ${
-          isDragActive ? 'border-indigo-500 bg-indigo-50/50 shadow-soft scale-[1.02]' : 'border-gray-200 hover:border-indigo-300 hover:bg-gray-50'
-        } ${isUploading ? 'opacity-50 cursor-not-allowed border-gray-200 bg-gray-50' : ''}`}
+        className={`border border-dashed rounded-2xl p-6 md:p-8 text-center cursor-pointer transition-all duration-300 ${
+          isDragActive ? 'border-brandAccent bg-brandAccent/5 scale-[1.01]' : 'border-white/[0.1] hover:border-brandAccent/50 hover:bg-white/[0.02]'
+        } ${isUploading ? 'opacity-50 cursor-not-allowed bg-white/[0.01]' : ''}`}
       >
         <input {...getInputProps()} />
         
-        <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 transition-colors ${
-          isDragActive ? 'bg-indigo-100 text-indigo-600' : 'bg-gray-50 text-gray-400'
+        <div className={`w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-4 transition-colors ${
+          isDragActive ? 'bg-brandAccent/10 text-brandAccent' : 'bg-white/[0.05] text-white/50'
         }`}>
           {isUploading ? (
-            <Loader2 className="w-8 h-8 animate-spin text-indigo-600" />
+            <Loader2 className="w-6 h-6 animate-spin text-brandAccent" />
           ) : (
-            <DocumentArrowUpIcon className={`w-8 h-8 ${isDragActive ? 'animate-bounce' : ''}`} />
+            <UploadCloud className={`w-6 h-6 ${isDragActive ? 'animate-bounce' : ''}`} />
           )}
         </div>
         
         {isUploading ? (
           <div>
-            <p className="text-gray-900 font-bold text-lg">Indexing Document</p>
-            <p className="text-gray-500 text-sm mt-1">Extracting text and building vector embeddings...</p>
+            <p className="text-white font-semibold">Indexing Document</p>
+            <p className="text-white/40 text-xs mt-1">Extracting text and building vector embeddings...</p>
           </div>
         ) : isDragActive ? (
           <div>
-            <p className="text-indigo-600 font-bold text-lg">Drop the document here</p>
-            <p className="text-indigo-400 text-sm mt-1">Release to start uploading</p>
+            <p className="text-brandAccent font-semibold">Drop the document here</p>
+            <p className="text-brandAccent/60 text-xs mt-1">Release to start uploading</p>
           </div>
         ) : (
           <div>
-            <p className="text-gray-900 font-bold text-lg">Drag & drop a document here</p>
-            <p className="text-gray-500 text-sm mt-1 mb-4">or click to select file</p>
+            <p className="text-white font-semibold">Drag & drop a document</p>
+            <p className="text-white/40 text-xs mt-1 mb-4">or click to browse files</p>
             <div className="flex items-center justify-center gap-2">
-              <span className="px-2.5 py-1 bg-gray-100 text-gray-600 rounded-md text-xs font-semibold">PDF</span>
-              <span className="px-2.5 py-1 bg-gray-100 text-gray-600 rounded-md text-xs font-semibold">TXT</span>
-              <span className="px-2.5 py-1 bg-gray-100 text-gray-600 rounded-md text-xs font-semibold">MD</span>
+              <span className="px-2 py-0.5 bg-white/[0.05] border border-white/[0.05] text-white/60 rounded text-[10px] font-bold uppercase tracking-wider">PDF</span>
+              <span className="px-2 py-0.5 bg-white/[0.05] border border-white/[0.05] text-white/60 rounded text-[10px] font-bold uppercase tracking-wider">TXT</span>
+              <span className="px-2 py-0.5 bg-white/[0.05] border border-white/[0.05] text-white/60 rounded text-[10px] font-bold uppercase tracking-wider">MD</span>
             </div>
           </div>
         )}

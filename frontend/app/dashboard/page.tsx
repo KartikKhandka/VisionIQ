@@ -1,222 +1,184 @@
 "use client";
-
-import { useScans } from "@/hooks/useScans"
-import { ImageUploader } from "@/components/upload/ImageUploader"
-import { ScanCard } from "@/components/dashboard/ScanCard"
-import { Loader2, TrendingUp, Image as ImageIcon, MessageSquare, Database, FileText, HardDrive, ArrowUpRight } from "lucide-react"
-import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis, PieChart, Pie, Cell } from "recharts"
-import { motion } from "framer-motion"
-
-const mockTimeData = [
-  { name: 'Mon', uploads: 4 },
-  { name: 'Tue', uploads: 7 },
-  { name: 'Wed', uploads: 3 },
-  { name: 'Thu', uploads: 12 },
-  { name: 'Fri', uploads: 8 },
-  { name: 'Sat', uploads: 15 },
-  { name: 'Sun', uploads: 5 },
-]
-
-const mockTypeData = [
-  { name: 'Images', value: 75, color: '#06b6d4' },
-  { name: 'PDFs', value: 25, color: '#71717a' },
-]
+import { useEffect, useState } from "react";
+import { useScans } from "@/hooks/useScans";
+import { useAuth } from "@/hooks/useAuth";
+import { knowledgeApi } from "@/lib/api";
+import { ScanCard } from "@/components/dashboard/ScanCard";
+import { Loader2, Zap, MessageSquare, BookOpen, Clock, ArrowRight, Upload, Sparkles } from "lucide-react";
+import Link from "next/link";
+import { motion } from "framer-motion";
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 28 },
+  hidden: { opacity: 0, y: 20 },
   visible: (i: number) => ({
     opacity: 1,
     y: 0,
-    transition: { delay: i * 0.08, duration: 0.6, ease: [0.16, 1, 0.3, 1] as any },
+    transition: { delay: i * 0.08, duration: 0.5, ease: [0.16, 1, 0.3, 1] as any },
   }),
 };
 
 export default function DashboardPage() {
-  const { data: scans, isLoading, error } = useScans(0, 10);
+  const { user } = useAuth();
+  const { data: scans, isLoading, error } = useScans(0, 100);
+  const [docCount, setDocCount] = useState(0);
 
-  const totalScans = scans ? scans.length : 0;
-  const storageUsed = scans ? scans.reduce((acc: number, s: any) => acc + (s.file_size || 0), 0) / (1024 * 1024) : 0;
+  useEffect(() => {
+    const fetchDocs = async () => {
+      try {
+        const res = await knowledgeApi.getDocuments();
+        setDocCount(res.data?.length || 0);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchDocs();
+  }, []);
+
+  const totalScans = scans?.length || 0;
+  const coveragePercent = totalScans > 0 ? Math.min(Math.round((docCount / totalScans) * 100), 100) : 0;
+
 
   return (
-    <div className="space-y-12 pb-20">
+    <div className="space-y-16 pb-20">
+      {/* Hero Section */}
       <motion.div
-        initial={{ opacity: 0, y: 28 }}
+        initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-        className="flex flex-col items-start text-left mb-8"
+        className="flex flex-col items-start pt-8"
       >
-        <span className="text-[10px] font-bold text-brandAccent uppercase tracking-widest mb-2">
-          Overview
-        </span>
-        <h1 className="h1 text-white">Dashboard</h1>
-        <p className="text-white/60 mt-3 text-sm">Welcome back to VisionIQ. Here is an overview of your workspace.</p>
+        <div className="inline-flex items-center gap-2 bg-brandAccent/10 border border-brandAccent/20 rounded-md px-3 py-1 mb-6">
+          <Sparkles className="w-3.5 h-3.5 text-brandAccent" />
+          <span className="text-[10px] font-bold tracking-[0.12em] uppercase text-brandAccent">
+            AI Appliance Copilot Active
+          </span>
+        </div>
+        <h1 className="font-display text-[clamp(32px,5vw,56px)] font-black uppercase leading-[0.95] tracking-tight text-white mb-4">
+          Welcome back, <br/>
+          <span className="text-brandAccent">{user?.full_name?.split(' ')[0] || "User"}.</span>
+        </h1>
+        <p className="text-white/50 text-base max-w-xl leading-relaxed">
+          Your AI workspace is ready. Upload a new appliance image, continue a recent conversation, or explore your indexed knowledge base.
+        </p>
       </motion.div>
 
-      {/* Top Stats Bento Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-        {[
-          { label: "Total Scans", value: totalScans, change: "12%", icon: ImageIcon },
-          { label: "Chat Conversations", value: 24, change: "8%", icon: MessageSquare },
-          { label: "Knowledge Docs", value: 12, change: null, icon: Database },
-          { label: "Storage Used", value: `${storageUsed.toFixed(1)}`, unit: "MB", change: null, icon: HardDrive },
-        ].map((stat, i) => (
-          <motion.div
-            key={stat.label}
-            custom={i}
-            initial="hidden"
-            animate="visible"
-            variants={fadeUp}
-            className="vision-card p-6 relative overflow-hidden group"
-          >
-            <div className="absolute top-0 right-0 p-6 opacity-[0.05] group-hover:opacity-[0.10] transition-opacity">
-              <stat.icon className="w-16 h-16 text-brandAccent" />
+      {/* Quick Actions (Cursor-like command items) */}
+      <motion.div 
+        initial="hidden"
+        animate="visible"
+        variants={fadeUp}
+        custom={1}
+        className="grid grid-cols-1 md:grid-cols-3 gap-4"
+      >
+        <Link href="/upload" className="group flex flex-col p-6 rounded-2xl bg-white/[0.02] border border-white/[0.05] hover:bg-white/[0.04] hover:border-brandAccent/30 transition-all duration-300">
+          <div className="w-10 h-10 rounded-xl bg-brandAccent/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+            <Upload className="w-5 h-5 text-brandAccent" />
+          </div>
+          <h3 className="text-sm font-bold text-white mb-1 uppercase tracking-wider">New Scan</h3>
+          <p className="text-xs text-white/40 leading-relaxed">Upload an image to identify an appliance instantly.</p>
+        </Link>
+        <Link href="/chat" className="group flex flex-col p-6 rounded-2xl bg-white/[0.02] border border-white/[0.05] hover:bg-white/[0.04] hover:border-brandAccent/30 transition-all duration-300">
+          <div className="w-10 h-10 rounded-xl bg-white/[0.05] flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+            <MessageSquare className="w-5 h-5 text-white/80" />
+          </div>
+          <h3 className="text-sm font-bold text-white mb-1 uppercase tracking-wider">Ask AI</h3>
+          <p className="text-xs text-white/40 leading-relaxed">Start a new conversation with the VisionIQ Engine.</p>
+        </Link>
+        <Link href="/knowledge" className="group flex flex-col p-6 rounded-2xl bg-white/[0.02] border border-white/[0.05] hover:bg-white/[0.04] hover:border-brandAccent/30 transition-all duration-300">
+          <div className="w-10 h-10 rounded-xl bg-white/[0.05] flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+            <BookOpen className="w-5 h-5 text-white/80" />
+          </div>
+          <h3 className="text-sm font-bold text-white mb-1 uppercase tracking-wider">Knowledge</h3>
+          <p className="text-xs text-white/40 leading-relaxed">Manage manuals and indexed workspace documents.</p>
+        </Link>
+      </motion.div>
+
+      {/* Two Column Layout for Activity */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 pt-8">
+        {/* Left Column: Recent Scans */}
+        <div className="lg:col-span-2 space-y-6">
+          <div className="flex items-center justify-between border-b border-white/[0.05] pb-4">
+            <h2 className="text-sm font-bold uppercase tracking-widest text-white/60">Recent Scans</h2>
+            <Link href="/history" className="text-xs font-bold text-brandAccent hover:text-brandAccent-light uppercase tracking-widest transition-colors flex items-center gap-1">
+              View All <ArrowRight className="w-3 h-3" />
+            </Link>
+          </div>
+          
+          {isLoading ? (
+            <div className="flex py-12">
+              <Loader2 className="w-6 h-6 animate-spin text-brandAccent" />
             </div>
-            <p className="text-[12px] font-semibold text-muted mb-2 uppercase tracking-wider">{stat.label}</p>
-            <div className="flex items-baseline gap-2">
-              <h2 className="text-[36px] font-extrabold text-white tracking-tight leading-none">
-                {stat.value}
-                {stat.unit && <span className="text-lg text-muted font-medium ml-1">{stat.unit}</span>}
-              </h2>
-              {stat.change && (
-                <span className="flex items-center text-[11px] font-bold text-brandAccent bg-brandAccent/10 px-2.5 py-0.5 rounded-full border border-brandAccent/20">
-                  <ArrowUpRight className="w-3 h-3 mr-0.5" /> {stat.change}
-                </span>
+          ) : error ? (
+            <div className="text-red-400 text-sm font-medium">Failed to load scans.</div>
+          ) : scans && scans.length > 0 ? (
+            <div className="grid gap-4 md:grid-cols-2">
+              {scans.slice(0, 4).map((scan: any, i: number) => (
+                <motion.div
+                  key={scan.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.2 + (i * 0.1) }}
+                >
+                  <ScanCard scan={scan} />
+                </motion.div>
+              ))}
+            </div>
+          ) : (
+            <div className="p-8 text-left border border-dashed border-white/10 rounded-2xl">
+              <h3 className="text-sm font-bold text-white mb-2">No scans yet</h3>
+              <p className="text-xs text-white/40 mb-4 max-w-sm">You haven&apos;t analyzed any appliances yet. Head over to the Upload Studio to get started.</p>
+              <Link href="/upload" className="inline-flex items-center justify-center px-4 py-2 bg-white/5 hover:bg-white/10 text-white text-xs font-bold uppercase tracking-widest rounded-lg transition-colors">
+                Upload Image
+              </Link>
+            </div>
+          )}
+        </div>
+
+        {/* Right Column: Activity / Health */}
+        <div className="space-y-10">
+          <div className="space-y-6">
+            <h2 className="text-sm font-bold uppercase tracking-widest text-white/60 border-b border-white/[0.05] pb-4">Workspace Health</h2>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-white/60">Knowledge Coverage</span>
+                <span className="text-sm font-bold text-brandAccent">{docCount} Docs</span>
+              </div>
+              <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
+                <div 
+                  className="h-full bg-brandAccent rounded-full shadow-[0_0_10px_#06b6d4] transition-all duration-1000" 
+                  style={{ width: `${coveragePercent}%` }}
+                ></div>
+              </div>
+              <p className="text-xs text-white/40">{coveragePercent}% of your scanned appliances have linked manuals.</p>
+            </div>
+          </div>
+
+          <div className="space-y-6">
+            <h2 className="text-sm font-bold uppercase tracking-widest text-white/60 border-b border-white/[0.05] pb-4">Recent Activity</h2>
+            <div className="space-y-4">
+              {scans && scans.length > 0 ? (
+                scans.slice(0, 3).map((scan: any) => (
+                  <div key={scan.id} className="flex gap-4">
+                    <div className="mt-1">
+                      <div className={`w-2 h-2 rounded-full ${scan.status === 'completed' ? 'bg-brandAccent/50' : scan.status === 'failed' ? 'bg-red-500/50' : 'bg-white/20'}`} />
+                    </div>
+                    <div>
+                      <p className="text-sm text-white/80">
+                        Analyzed <span className="font-bold text-white">{scan.detected_brand_id || scan.original_filename || 'Appliance'}</span>
+                      </p>
+                      <p className="text-xs text-white/40 mt-0.5">
+                        {new Date(scan.created_at).toLocaleDateString()} at {new Date(scan.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                      </p>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <p className="text-xs text-white/40">No recent activity found.</p>
               )}
             </div>
-          </motion.div>
-        ))}
-      </div>
-
-      {/* Analytics Charts */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-          className="lg:col-span-2 vision-card p-8"
-        >
-          <div className="flex items-center justify-between mb-8">
-            <div>
-              <h3 className="h3 text-white">Uploads Over Time</h3>
-              <p className="text-[14px] text-muted mt-1">Activity for the past 7 days</p>
-            </div>
-            <div className="w-10 h-10 rounded-[10px] bg-brandAccent/10 flex items-center justify-center border border-brandAccent/20">
-              <TrendingUp className="w-5 h-5 text-brandAccent-light" />
-            </div>
           </div>
-          <div className="h-[250px] w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={mockTimeData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                <defs>
-                  <linearGradient id="colorUploads" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#06b6d4" stopOpacity={0.4} />
-                    <stop offset="95%" stopColor="#06b6d4" stopOpacity={0} />
-                  </linearGradient>
-                </defs>
-                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#71717a' }} dy={10} />
-                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#71717a' }} />
-                <Tooltip 
-                  contentStyle={{ borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', background: '#09090b', color: '#fafafa', boxShadow: '0 8px 32px rgba(0,0,0,0.5)' }} 
-                />
-                <Area type="monotone" dataKey="uploads" stroke="#06b6d4" strokeWidth={3} fillOpacity={1} fill="url(#colorUploads)" />
-              </AreaChart>
-            </ResponsiveContainer>
-          </div>
-        </motion.div>
-        
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
-          className="vision-card p-8"
-        >
-          <div className="mb-6">
-            <h3 className="h3 text-white">Document Types</h3>
-            <p className="text-[14px] text-muted mt-1">Distribution by format</p>
-          </div>
-          <div className="h-[200px] w-full relative">
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie
-                  data={mockTypeData}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={65}
-                  outerRadius={85}
-                  paddingAngle={5}
-                  dataKey="value"
-                  stroke="none"
-                >
-                  {mockTypeData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
-                </Pie>
-                <Tooltip contentStyle={{ borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', background: '#09090b', color: '#fafafa' }} />
-              </PieChart>
-            </ResponsiveContainer>
-            <div className="absolute inset-0 flex items-center justify-center flex-col pointer-events-none">
-              <span className="text-3xl font-extrabold text-white">100%</span>
-              <span className="text-sm font-semibold uppercase tracking-wider text-muted">Total</span>
-            </div>
-          </div>
-          <div className="flex justify-center gap-6 mt-6">
-            {mockTypeData.map((t) => (
-              <div key={t.name} className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-[3px]" style={{ backgroundColor: t.color }}></div>
-                <span className="text-sm font-medium text-muted">{t.name}</span>
-              </div>
-            ))}
-          </div>
-        </motion.div>
-      </div>
-      
-      {/* Upload Section */}
-      <motion.section
-        initial={{ opacity: 0, y: 28 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.4 }}
-        className="vision-card p-2"
-      >
-        <ImageUploader />
-      </motion.section>
-
-      {/* Recent Scans Section */}
-      <section>
-        <div className="flex items-center justify-between mb-8">
-          <h2 className="h2 text-[28px]">Recent Scans</h2>
         </div>
-        
-        {isLoading ? (
-          <div className="flex justify-center py-12">
-            <Loader2 className="w-8 h-8 animate-spin text-brandAccent" />
-          </div>
-        ) : error ? (
-          <div className="text-red-400 bg-red-500/10 border border-red-500/20 p-4 rounded-xl font-medium">
-            Failed to load scans. Please try again.
-          </div>
-        ) : scans && scans.length > 0 ? (
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {scans.map((scan: any, i: number) => (
-              <motion.div
-                key={scan.id}
-                initial={{ opacity: 0, y: 28 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: i * 0.1 }}
-              >
-                <ScanCard scan={scan} />
-              </motion.div>
-            ))}
-          </div>
-        ) : (
-          <div className="vision-card p-12 text-center">
-            <div className="w-20 h-20 bg-white/[0.04] rounded-[16px] flex items-center justify-center mx-auto mb-6 border border-white/[0.06]">
-              <FileText className="w-10 h-10 text-muted-2" />
-            </div>
-            <h3 className="h3 mb-2 text-white">No recent activity</h3>
-            <p className="text-muted text-[15px] max-w-sm mx-auto">Upload an image or document above to begin your VisionIQ journey.</p>
-          </div>
-        )}
-      </section>
+      </div>
     </div>
   );
 }

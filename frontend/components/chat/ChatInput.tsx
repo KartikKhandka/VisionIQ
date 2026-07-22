@@ -31,18 +31,18 @@ export default function ChatInput({ input, setInput, onSubmit, isLoading, disabl
   };
 
   return (
-    <div className="bg-transparent p-4 w-full flex justify-center pb-8">
+    <div className="w-full flex justify-center pb-8 px-4">
       <form 
         onSubmit={onSubmit}
-        className="w-full max-w-4xl relative flex items-end gap-3 vision-card p-2 !rounded-2xl border-white/10 focus-within:border-brandAccent/50 focus-within:ring-1 focus-within:ring-brandAccent/50 transition-shadow"
+        className="w-full max-w-3xl relative flex items-end gap-2 bg-[#2a2a2b]/60 backdrop-blur-2xl p-2 rounded-3xl border border-white/[0.05] shadow-[0_0_40px_rgba(0,0,0,0.5)] focus-within:border-white/[0.15] focus-within:bg-[#2a2a2b]/80 transition-all duration-300"
       >
         <textarea
           ref={textareaRef}
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Ask a question about the scanned object or knowledge base..."
-          className="flex-1 bg-transparent border-0 focus:ring-0 resize-none max-h-[200px] py-2 px-3 text-white placeholder-muted"
+          placeholder="Ask a question..."
+          className="flex-1 bg-transparent border-0 focus:ring-0 resize-none max-h-[200px] py-3.5 px-5 text-white placeholder-white/30 text-[15px]"
           rows={1}
           disabled={isLoading || disabled}
         />
@@ -50,16 +50,10 @@ export default function ChatInput({ input, setInput, onSubmit, isLoading, disabl
         <button
           type="submit"
           disabled={!input.trim() || isLoading || disabled}
-          className="shrink-0 p-2.5 rounded-xl bg-brandAccent text-white hover:bg-[#cc0600] disabled:bg-white/5 disabled:text-muted transition-colors mb-0.5"
+          className="shrink-0 p-3 rounded-full bg-white text-black font-bold hover:bg-white/90 disabled:bg-white/10 disabled:text-white/30 transition-all mb-1 mr-1"
         >
-          <PaperAirplaneIcon className="w-5 h-5" />
+          <PaperAirplaneIcon className="w-4 h-4" />
         </button>
-        
-        <div className="absolute -bottom-6 left-0 right-0 text-center">
-          <span className="text-xs text-gray-400">
-            Press Enter to send, Shift+Enter for new line. AI can make mistakes.
-          </span>
-        </div>
       </form>
     </div>
   );

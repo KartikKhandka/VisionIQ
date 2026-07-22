@@ -4,16 +4,17 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
 import { cn } from "@/lib/utils";
-import { LayoutDashboard, History, MessageSquare, User, Settings, Menu, X, Bell, BookOpen, Search, LogOut, Scan } from "lucide-react";
+import { LayoutDashboard, History, MessageSquare, User, Settings, Menu, X, Bell, BookOpen, Search, LogOut, Scan, Upload } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 
 const navItems = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-  { name: "History", href: "/history", icon: History },
-  { name: "Knowledge", href: "/knowledge", icon: BookOpen },
+  { name: "Upload", href: "/upload", icon: Upload },
   { name: "Chat", href: "/chat", icon: MessageSquare },
+  { name: "Knowledge", href: "/knowledge", icon: BookOpen },
+  { name: "History", href: "/history", icon: History },
 ];
 
 export function Navbar() {

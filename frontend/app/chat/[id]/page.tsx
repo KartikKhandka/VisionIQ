@@ -6,6 +6,8 @@ import ChatArea, { Message } from '@/components/chat/ChatArea';
 import ChatInput from '@/components/chat/ChatInput';
 import { chatApi } from '@/lib/api';
 
+
+
 export default function ChatConversationPage() {
   const { id } = useParams();
   const [messages, setMessages] = useState<Message[]>([]);
@@ -98,20 +100,22 @@ export default function ChatConversationPage() {
   };
 
   return (
-    <div className="flex flex-col h-full bg-transparent relative">
-      <ChatArea 
-        messages={messages} 
-        isLoading={isLoading} 
-        streamingMessage={streamingMessage} 
-      />
-      <div className="absolute bottom-0 w-full z-10 bg-gradient-to-t from-[#09090b] via-[#09090b]/90 to-transparent pt-12 pb-2">
-        <ChatInput
-          input={input}
-          setInput={setInput}
-          onSubmit={handleSubmit}
-          isLoading={isLoading}
+    <>
+      <div className="flex flex-col h-[calc(100vh-80px)] bg-transparent relative">
+        <ChatArea 
+          messages={messages} 
+          isLoading={isLoading} 
+          streamingMessage={streamingMessage} 
         />
+        <div className="absolute bottom-0 w-full z-10 bg-gradient-to-t from-[#09090b] via-[#09090b]/90 to-transparent pt-24 pb-2 px-8">
+          <ChatInput
+            input={input}
+            setInput={setInput}
+            onSubmit={handleSubmit}
+            isLoading={isLoading}
+          />
+        </div>
       </div>
-    </div>
+    </>
   );
 }

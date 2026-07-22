@@ -7,10 +7,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
 
 const PIPELINE_STAGES = [
-  { id: 'uploading', label: 'Uploading file', icon: Upload },
-  { id: 'vision', label: 'Vision Analysis', icon: Search },
-  { id: 'ocr', label: 'OCR Extraction', icon: Type },
-  { id: 'indexing', label: 'Knowledge Indexing', icon: Database },
+  { id: 'uploading', label: 'Uploading...', icon: Upload },
+  { id: 'reading', label: 'Reading image...', icon: FileImage },
+  { id: 'vision', label: 'Running Vision AI...', icon: Sparkles },
+  { id: 'ocr', label: 'Extracting OCR...', icon: Type },
+  { id: 'manuals', label: 'Finding manuals...', icon: Database },
+  { id: 'assistant', label: 'Preparing AI Assistant...', icon: Search },
+  { id: 'done', label: 'Done.', icon: CheckCircle2 },
 ];
 
 export const ImageUploader = () => {
@@ -26,7 +29,7 @@ export const ImageUploader = () => {
       setCurrentStage(0);
       interval = setInterval(() => {
         setCurrentStage((prev) => (prev < PIPELINE_STAGES.length - 1 ? prev + 1 : prev));
-      }, 1500);
+      }, 1200);
     }
     return () => clearInterval(interval);
   }, [isPending]);
@@ -91,7 +94,7 @@ export const ImageUploader = () => {
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto py-8">
+    <div className="w-full mx-auto py-4">
       <AnimatePresence mode="wait">
         {!selectedFile ? (
           <motion.div
@@ -99,10 +102,10 @@ export const ImageUploader = () => {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95 }}
-            className={`relative flex flex-col items-center justify-center w-full h-80 border-2 border-dashed rounded-3xl transition-all duration-300 ${
+            className={`relative flex flex-col items-center justify-center w-full min-h-[500px] border border-dashed rounded-3xl transition-all duration-300 ${
               dragActive 
-                ? 'border-indigo-500/50 bg-indigo-500/5 shadow-glow scale-[1.02]' 
-                : 'border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/[0.12]'
+                ? 'border-brandAccent bg-brandAccent/[0.03] shadow-[0_0_50px_rgba(6,182,212,0.1)] scale-[1.01]' 
+                : 'border-white/[0.1] bg-white/[0.01] hover:bg-white/[0.03] hover:border-white/[0.2]'
             }`}
             onDragEnter={handleDrag}
             onDragLeave={handleDrag}
@@ -115,7 +118,7 @@ export const ImageUploader = () => {
               onChange={handleChange}
               accept="image/jpeg,image/png,image/webp"
             />
-            <div className={`w-20 h-20 rounded-full flex items-center justify-center mb-6 transition-colors duration-300 ${dragActive ? 'bg-indigo-500/10 text-indigo-400' : 'bg-white/[0.04] text-slate-500'}`}>
+            <div className={`w-20 h-20 rounded-full flex items-center justify-center mb-6 transition-colors duration-300 ${dragActive ? 'bg-brandAccent/10 text-brandAccent' : 'bg-white/[0.04] text-slate-500'}`}>
               <Upload className={`w-10 h-10 ${dragActive ? 'animate-bounce' : ''}`} />
             </div>
             <h3 className="text-2xl font-bold text-slate-200 mb-2">Drag & drop your image here</h3>
@@ -160,12 +163,12 @@ export const ImageUploader = () => {
 
                 {!isPending && !isSuccess ? (
                   <div className="space-y-4">
-                    <div className="p-4 bg-indigo-500/10 border border-indigo-500/20 rounded-2xl">
+                    <div className="p-4 bg-brandAccent/10 border border-brandAccent/20 rounded-2xl">
                       <div className="flex gap-3">
-                        <Sparkles className="w-5 h-5 text-indigo-400 shrink-0 mt-0.5" />
+                        <Sparkles className="w-5 h-5 text-brandAccent shrink-0 mt-0.5" />
                         <div>
-                          <h4 className="font-semibold text-indigo-300 mb-1">Ready for AI Analysis</h4>
-                          <p className="text-sm text-indigo-400/80 leading-relaxed">VisionIQ will analyze this image using Gemini Vision to detect objects, extract text, and build a semantic summary.</p>
+                          <h4 className="font-semibold text-brandAccent mb-1">Ready for AI Analysis</h4>
+                          <p className="text-sm text-brandAccent/80 leading-relaxed">VisionIQ will analyze this image using Gemini Vision to detect objects, extract text, and build a semantic summary.</p>
                         </div>
                       </div>
                     </div>
@@ -187,7 +190,7 @@ export const ImageUploader = () => {
                       </Button>
                       <Button 
                         size="lg"
-                        className="flex-1 rounded-xl h-12 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 shadow-glow transition-all hover:shadow-glow-lg hover:-translate-y-0.5 text-white"
+                        className="flex-1 rounded-xl h-12 bg-brandAccent hover:bg-brandAccent-light text-black font-bold shadow-[0_0_20px_rgba(6,182,212,0.4)] transition-all hover:shadow-[0_0_30px_rgba(6,182,212,0.6)] hover:-translate-y-0.5"
                         onClick={handleUpload}
                       >
                         Start Analysis
@@ -205,24 +208,24 @@ export const ImageUploader = () => {
 
                         return (
                           <div key={stage.id} className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
-                            <div className="flex items-center justify-center w-8 h-8 rounded-full border-2 border-slate-800 bg-slate-900 shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 transition-colors duration-300 overflow-hidden">
+                            <div className="flex items-center justify-center w-8 h-8 rounded-full border border-white/10 bg-[#111] shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 transition-colors duration-300 overflow-hidden">
                               {isCompleted ? (
-                                <div className="w-full h-full bg-emerald-500 flex items-center justify-center text-white"><CheckCircle2 className="w-5 h-5" /></div>
+                                <div className="w-full h-full bg-green-500/20 flex items-center justify-center text-green-400"><CheckCircle2 className="w-5 h-5" /></div>
                               ) : isCurrent ? (
-                                <div className="w-full h-full bg-indigo-500/20 flex items-center justify-center text-indigo-400"><Loader2 className="w-4 h-4 animate-spin" /></div>
+                                <div className="w-full h-full bg-brandAccent/20 flex items-center justify-center text-brandAccent"><Loader2 className="w-4 h-4 animate-spin" /></div>
                               ) : (
-                                <div className="w-full h-full flex items-center justify-center text-slate-600"><Icon className="w-4 h-4" /></div>
+                                <div className="w-full h-full flex items-center justify-center text-white/40"><Icon className="w-4 h-4" /></div>
                               )}
                             </div>
                             <div className={`w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] px-4 py-3 rounded-xl border transition-all duration-300 ${
-                              isCompleted ? 'bg-emerald-500/5 border-emerald-500/20' :
-                              isCurrent ? 'bg-indigo-500/5 border-indigo-500/20' :
+                              isCompleted ? 'bg-green-500/5 border-green-500/20' :
+                              isCurrent ? 'bg-brandAccent/10 border-brandAccent/30 shadow-[0_0_15px_rgba(6,182,212,0.15)]' :
                               'bg-white/[0.02] border-transparent opacity-60'
                             }`}>
-                              <p className={`font-semibold text-sm ${
-                                isCompleted ? 'text-emerald-300' :
-                                isCurrent ? 'text-indigo-300' :
-                                'text-slate-500'
+                              <p className={`font-bold text-xs uppercase tracking-widest ${
+                                isCompleted ? 'text-green-400' :
+                                isCurrent ? 'text-brandAccent' :
+                                'text-white/40'
                               }`}>{stage.label}</p>
                             </div>
                           </div>

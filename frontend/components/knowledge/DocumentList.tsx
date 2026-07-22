@@ -1,8 +1,8 @@
 import React from 'react';
 import { format } from 'date-fns';
-import { DocumentTextIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { knowledgeApi } from '@/lib/api';
 import toast from 'react-hot-toast';
+import { FileText, Trash2, File, Calendar, CheckCircle2 } from 'lucide-react';
 
 export interface KnowledgeDocument {
   id: string;
@@ -32,49 +32,65 @@ export default function DocumentList({ documents, onRefresh }: DocumentListProps
 
   if (documents.length === 0) {
     return (
-      <div className="text-center py-12 bg-white rounded-2xl border border-gray-100 shadow-sm mt-8">
-        <DocumentTextIcon className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-        <h3 className="text-lg font-medium text-gray-900">No documents yet</h3>
-        <p className="text-gray-500 mt-1">Upload a document above to add it to the knowledge base.</p>
+      <div className="flex flex-col items-center justify-center py-20 border border-dashed border-white/10 rounded-2xl bg-white/[0.01]">
+        <div className="w-12 h-12 bg-white/[0.05] rounded-xl flex items-center justify-center mb-4">
+          <FileText className="w-6 h-6 text-white/30" />
+        </div>
+        <h3 className="text-[15px] font-semibold text-white/90">No documents indexed</h3>
+        <p className="text-[13px] text-white/40 mt-1 max-w-sm text-center">Upload manuals, guides, or specifications to allow the AI to reference them.</p>
       </div>
     );
   }
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden mt-8">
-      <div className="px-6 py-4 border-b border-gray-100 bg-gray-50/50">
-        <h3 className="text-lg font-semibold text-gray-800">Indexed Knowledge</h3>
-      </div>
-      <div className="divide-y divide-gray-100">
-        {documents.map((doc) => (
-          <div key={doc.id} className="p-4 sm:px-6 flex items-center justify-between hover:bg-gray-50 transition-colors">
-            <div className="flex items-center gap-4 min-w-0">
-              <div className="w-10 h-10 rounded-lg bg-indigo-50 flex items-center justify-center shrink-0">
-                <DocumentTextIcon className="w-6 h-6 text-indigo-600" />
-              </div>
-              <div className="min-w-0 flex-1">
-                <p className="text-sm font-medium text-gray-900 truncate">{doc.title}</p>
-                <div className="flex items-center gap-2 mt-1">
-                  <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800">
-                    {doc.document_type}
-                  </span>
-                  <span className="text-xs text-gray-500">
+    <div className="w-full mt-4">
+      <div className="overflow-x-auto">
+        <table className="w-full text-left border-collapse">
+          <thead>
+            <tr className="border-b border-white/[0.05]">
+              <th className="pb-3 px-4 font-semibold text-[11px] uppercase tracking-wider text-white/40 w-1/2">Title</th>
+              <th className="pb-3 px-4 font-semibold text-[11px] uppercase tracking-wider text-white/40">Status</th>
+              <th className="pb-3 px-4 font-semibold text-[11px] uppercase tracking-wider text-white/40">Uploaded</th>
+              <th className="pb-3 px-4 font-semibold text-[11px] uppercase tracking-wider text-white/40 text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {documents.map((doc, idx) => (
+              <tr key={doc.id} className="group border-b border-white/[0.02] hover:bg-white/[0.02] transition-colors">
+                <td className="py-4 px-4">
+                  <div className="flex items-center gap-3">
+                    <File className="w-4 h-4 text-brandAccent shrink-0" />
+                    <div>
+                      <p className="text-[14px] font-medium text-white/90 truncate max-w-[300px]">{doc.title}</p>
+                      <p className="text-[11px] text-white/40 uppercase tracking-wider mt-0.5">{doc.document_type || "PDF Document"}</p>
+                    </div>
+                  </div>
+                </td>
+                <td className="py-4 px-4">
+                  <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-green-500/10 border border-green-500/20 w-fit">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-green-400" />
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-green-400">Indexed</span>
+                  </div>
+                </td>
+                <td className="py-4 px-4">
+                  <div className="flex items-center gap-1.5 text-white/50 text-[13px]">
+                    <Calendar className="w-3.5 h-3.5" />
                     {format(new Date(doc.created_at), 'MMM d, yyyy')}
-                  </span>
-                </div>
-              </div>
-            </div>
-            <div className="flex items-center gap-2 shrink-0 ml-4">
-              <button 
-                onClick={() => handleDelete(doc.id)}
-                className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
-                title="Delete document"
-              >
-                <TrashIcon className="w-5 h-5" />
-              </button>
-            </div>
-          </div>
-        ))}
+                  </div>
+                </td>
+                <td className="py-4 px-4 text-right">
+                  <button 
+                    onClick={() => handleDelete(doc.id)}
+                    className="p-2 text-white/30 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors opacity-0 group-hover:opacity-100"
+                    title="Delete document"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );

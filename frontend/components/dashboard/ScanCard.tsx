@@ -1,15 +1,17 @@
 import React from 'react';
 import { AuthorizedImage } from '@/components/ui/AuthorizedImage';
-import { Clock, CheckCircle2, XCircle, Loader2, ArrowRight } from 'lucide-react';
+import { Clock, CheckCircle2, XCircle, Loader2, ArrowRight, AlertTriangle } from 'lucide-react';
 import Link from 'next/link';
 
-export const ScanCard = ({ scan }: { scan: any }) => {
+export const ScanCard = ({ scan, listView = false }: { scan: any; listView?: boolean }) => {
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'completed':
         return <CheckCircle2 className="w-4 h-4 text-emerald-400" />;
       case 'failed':
         return <XCircle className="w-4 h-4 text-red-400" />;
+      case 'needs_retry':
+        return <AlertTriangle className="w-4 h-4 text-orange-400" />;
       default:
         return <Loader2 className="w-4 h-4 text-indigo-400 animate-spin" />;
     }
@@ -21,6 +23,8 @@ export const ScanCard = ({ scan }: { scan: any }) => {
         return 'bg-emerald-500/10 text-emerald-300 border-emerald-500/20';
       case 'failed':
         return 'bg-red-500/10 text-red-300 border-red-500/20';
+      case 'needs_retry':
+        return 'bg-orange-500/10 text-orange-300 border-orange-500/20';
       default:
         return 'bg-indigo-500/10 text-indigo-300 border-indigo-500/20';
     }
@@ -57,7 +61,7 @@ export const ScanCard = ({ scan }: { scan: any }) => {
             </h3>
             <div className={`px-2.5 py-1 rounded-full text-xs font-medium border flex items-center space-x-1.5 whitespace-nowrap ${getStatusColor(scan.status)}`}>
               {getStatusIcon(scan.status)}
-              <span className="capitalize">{scan.status}</span>
+              <span className="capitalize">{scan.status === 'needs_retry' ? 'Needs Analysis' : scan.status}</span>
             </div>
           </div>
           

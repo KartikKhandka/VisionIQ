@@ -8,6 +8,8 @@ import toast from "react-hot-toast";
 import { useAuth } from "@/hooks/useAuth";
 import { api } from "@/services/api";
 
+import { WorkspaceLayout } from "@/components/workspace-layout";
+
 const tabs = [
   { id: "profile", name: "Profile & Account", icon: User },
   { id: "notifications", name: "Notifications", icon: Bell },
@@ -104,7 +106,8 @@ export default function SettingsPage() {
   };
 
   return (
-    <div className="p-8 max-w-6xl mx-auto space-y-10 pb-20">
+    <WorkspaceLayout>
+      <div className="p-8 max-w-6xl mx-auto space-y-10 pb-20">
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
@@ -297,6 +300,7 @@ export default function SettingsPage() {
         </div>
       </div>
     </div>
+    </WorkspaceLayout>
   );
 }
 
