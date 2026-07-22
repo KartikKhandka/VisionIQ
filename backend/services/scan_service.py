@@ -9,6 +9,10 @@ from models.activity import Scan
 from repositories.scan_repo import ScanRepository
 from services.image_service import ImageService
 from services.providers.provider_factory import get_vision_provider
+from services.providers.exceptions import (
+    AIProviderError, AIQuotaExceededError, AIRateLimitError,
+    AITimeoutError, AINetworkError
+)
 import logging
 
 logger = logging.getLogger(__name__)
@@ -27,7 +31,7 @@ class ScanService:
     async def process_upload(self, file: UploadFile, user_id: uuid.UUID, background_tasks: BackgroundTasks = None) -> Scan:
         """Processes the uploaded file synchronously for V1."""
         logger.info(f"=== PIPELINE START: Uploading file {file.filename} ===")
-        # 1. Validate and save image locally
+        
         try:
             metadata = await self.image_service.validate_and_save(file)
             logger.info(f"Storage: Saved to {metadata['storage_path']}")
@@ -35,13 +39,13 @@ class ScanService:
             logger.error(f"Storage Error: {e}")
             raise HTTPException(status_code=400, detail=str(e))
             
-        # 2. Check for duplicate upload (optional, we just log it for now)
+        
         existing = self.scan_repo.get_by_hash_and_user(metadata["image_hash"], user_id)
         if existing:
-            # We could return the existing scan here, but for now we process it again
+            
             pass
 
-        # 3. Create Scan record (status: uploaded)
+        
         scan_data = {
             "user_id": user_id,
             "original_filename": metadata["original_filename"],
@@ -57,10 +61,10 @@ class ScanService:
         }
         scan = self.scan_repo.create(scan_data)
         
-        # 4. Synchronous Processing (Mocking Future Celery Worker)
+        
         scan = await self._run_vision_pipeline(scan.id)
         
-        # 5. Background Tasks
+        
         if background_tasks and scan.status == "completed" and scan.detected_model_number:
             brand = None
             if scan.tags:
@@ -72,6 +76,23 @@ class ScanService:
                 background_tasks.add_task(fetch_and_ingest_manual_task, brand, scan.detected_model_number)
                 
         return scan
+
+    def _get_friendly_error_message(self, e: Exception) -> str:
+        if isinstance(e, AIQuotaExceededError):
+            return "The AI provider has reached its usage limit. Your scan has been saved and can be analyzed later."
+        if isinstance(e, (AIRateLimitError, AITimeoutError, AINetworkError, AIProviderError)):
+            return "The AI service is temporarily unavailable. Your scan has been saved and can be analyzed later."
+        return "An unexpected error occurred during analysis. Your scan has been saved and can be analyzed later."
+
+    async def retry_analysis(self, scan_id: uuid.UUID, user_id: uuid.UUID) -> Scan:
+        scan = self.scan_repo.get_by_id_and_user(scan_id, user_id)
+        if not scan:
+            raise HTTPException(status_code=404, detail="Scan not found")
+        
+        if scan.status not in ["failed", "needs_retry", "completed"]:
+            raise HTTPException(status_code=400, detail="Only failed, delayed, or completed scans can be retried.")
+            
+        return await self._run_vision_pipeline(scan.id)
 
     async def _run_vision_pipeline(self, scan_id: uuid.UUID) -> Scan:
         """Executes the CV pipeline. In V2, this will be run by a celery worker."""
@@ -87,16 +108,16 @@ class ScanService:
         })
         
         try:
-            # Generate thumbnails
+            
             await self.image_service.generate_thumbnails(scan.stored_filename)
             
-            # Run AI analysis
+            
             results = await self.vision_engine.analyze_image(scan.storage_path, scan.mime_type)
             
-            # Update scan with success
+            
             processing_time = int((time.time() - start_time) * 1000)
             
-            # Phase 6C: Validation check for Appliance Copilot MVP
+            
             if not results.is_appliance:
                 logger.warning(f"Vision Engine: Image rejected (not an appliance) for {scan.original_filename}")
                 update_data = {
@@ -109,7 +130,7 @@ class ScanService:
             
             objs = [{"label": obj.label, "confidence": obj.confidence} for obj in results.objects]
             
-            # Pack rich metadata into tags using structured prefixes
+            
             tags = results.tags.copy()
             if results.scene_summary:
                 tags.append(f"Scene Summary: {results.scene_summary}")
@@ -118,7 +139,7 @@ class ScanService:
             if results.brands:
                 tags.append(f"Brands: {', '.join(results.brands)}")
             
-            # Phase 6C: Appliance Copilot metadata
+            
             if results.appliance_type:
                 tags.append(f"Appliance Type: {results.appliance_type}")
             if results.model_number:
@@ -156,7 +177,7 @@ class ScanService:
                 "ocr_raw_text": ocr
             }
             
-            # Populate legacy detected_model_number column if model extracted
+            
             if results.model_number:
                 update_data["detected_model_number"] = results.model_number
             
@@ -164,12 +185,12 @@ class ScanService:
             logger.info(f"=== PIPELINE END: Scan {scan.id} completed successfully ===")
             
         except Exception as e:
-            logger.error(f"=== PIPELINE ERROR: Vision Engine failed: {str(e)} ===")
-            # Update scan with failure
+            logger.error(f"=== PIPELINE ERROR: Vision Engine failed: {e.__class__.__name__} - {str(e)} ===")
+            error_message = self._get_friendly_error_message(e)
             scan = self.scan_repo.update(scan, {
-                "status": "failed",
+                "status": "needs_retry",
                 "completed_at": datetime.now(timezone.utc),
-                "error_message": str(e)
+                "error_message": error_message
             })
             
         return scan
@@ -185,10 +206,10 @@ class ScanService:
         if not scan:
             raise HTTPException(status_code=404, detail="Scan not found")
             
-        # Delete local files
+        
         self.image_service.delete_files(scan.stored_filename)
         
-        # Soft delete database record
+        
         self.scan_repo.soft_delete(scan)
 
 async def fetch_and_ingest_manual_task(brand: str, model_number: str):
@@ -203,7 +224,7 @@ async def fetch_and_ingest_manual_task(brand: str, model_number: str):
     logger.info(f"Background Task: Starting fetch_and_ingest_manual_task for {brand} {model_number}")
     db = SessionLocal()
     try:
-        # Check if manual already exists
+        
         existing = db.query(KnowledgeDocument).filter(
             KnowledgeDocument.brand.ilike(f"%{brand}%"),
             KnowledgeDocument.title.ilike(f"%{model_number}%")
@@ -226,7 +247,7 @@ async def fetch_and_ingest_manual_task(brand: str, model_number: str):
         knowledge_service = KnowledgeService(vector_search, chunk_strategy, embedding_provider)
         
         filename = file_path.split("/")[-1]
-        # or os.path.basename(file_path)
+        
         
         await knowledge_service.ingest_document(
             db=db,

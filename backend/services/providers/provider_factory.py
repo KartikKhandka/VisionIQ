@@ -11,6 +11,9 @@ def get_llm_provider() -> LLMProvider:
     if provider_name == "gemini":
         from services.providers.gemini_provider import GeminiProvider
         return GeminiProvider()
+    elif provider_name == "groq":
+        from services.providers.groq_provider import GroqProvider
+        return GroqProvider()
     else:
         raise ValueError(f"Unsupported LLM_PROVIDER: {provider_name}")
 
@@ -20,5 +23,8 @@ def get_vision_provider():
     if provider_name == "gemini":
         from services.providers.vision_gemini import GeminiVisionProvider
         return GeminiVisionProvider()
+    elif provider_name == "groq":
+        from services.providers.vision_groq import GroqVisionProvider
+        return GroqVisionProvider()
     else:
         raise ValueError(f"Unsupported VISION_PROVIDER: {provider_name}")

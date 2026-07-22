@@ -1,13 +1,16 @@
 import logging
 import json
+import asyncio
 import aiofiles
 from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception
 from google import genai
 from google.genai import types
+from google.genai.errors import APIError
 
 from core.config import settings
 from services.providers.vision_base import VisionProvider, VisionAnalysis
-from services.providers.gemini_provider import is_transient_error
+from services.providers.gemini_provider import is_transient_error, map_gemini_error
+from services.providers.exceptions import AIInvalidResponseError
 
 logger = logging.getLogger(__name__)
 
@@ -36,7 +39,7 @@ class GeminiVisionProvider(VisionProvider):
             "If it DOES contain an appliance, set 'is_appliance' to true. If it does NOT, set 'is_appliance' to false and skip extracting appliance-specific details. "
             "If true, identify the appliance type and brand. Extract the model number and serial number if visible on any label or sticker.\n\n"
             "2. COMPONENTS: List every visible component (e.g., control panel, door, drum, filter, display screen, buttons, knobs, hoses, vents).\n\n"
-            "3. LABELS & WARNINGS: Extract any warning labels (e.g., 'High Voltage', 'Do Not Cover') and energy rating labels (e.g., '5 Star', 'A++', 'Energy Star').\n\n"
+            "3. LABELS & WARNINGS: Extract any printed warning labels, AS WELL AS any visible physical damage, broken parts, or safety hazards.\n\n"
             "4. OCR: Extract ALL visible text exactly as printed — model numbers, serial numbers, instructions, labels, warnings.\n\n"
             "5. OBJECTS: Identify all objects in the scene with confidence scores (0.0 to 1.0).\n\n"
             "6. VISUAL: List prominent colors and generate relevant tags.\n\n"
@@ -59,15 +62,22 @@ class GeminiVisionProvider(VisionProvider):
         )
 
         try:
-            response = await self.client.aio.models.generate_content(
-                model=settings.GEMINI_MODEL,
-                contents=[image_part, prompt],
-                config=config
+            response = await asyncio.wait_for(
+                self.client.aio.models.generate_content(
+                    model=settings.GEMINI_MODEL,
+                    contents=[image_part, prompt],
+                    config=config
+                ),
+                timeout=45.0
             )
             data = json.loads(response.text)
             logger.info(f"Gemini Vision: Successfully analyzed image. Appliance: {data.get('appliance_type', 'N/A')}")
             return VisionAnalysis(**data)
+        except json.JSONDecodeError as e:
+            err = AIInvalidResponseError(f"Invalid JSON from AI provider: {e}")
+            logger.error(f"Gemini Vision Error: {err}")
+            raise err
         except Exception as e:
-            logger.error(f"Gemini Vision Error: {e}")
-            # Re-raise so scan_service marks the scan as 'failed' instead of 'completed' with empty data
-            raise
+            mapped_e = map_gemini_error(e)
+            logger.error(f"Gemini Vision Error: {mapped_e.__class__.__name__} - {mapped_e}")
+            raise mapped_e

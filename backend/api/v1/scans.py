@@ -68,6 +68,18 @@ def get_scan(
     return scan
 
 
+@router.post(
+    "/{scan_id}/retry",
+    response_model=ScanResponse,
+    summary="Retry a failed or delayed scan analysis"
+)
+async def retry_scan(
+    scan_id: uuid.UUID,
+    current_user: User = Depends(get_current_active_user),
+    db: Session = Depends(get_db)
+):
+    scan_service = ScanService(db)
+    return await scan_service.retry_analysis(scan_id, current_user.id)
 @router.delete(
     "/{scan_id}",
     status_code=status.HTTP_204_NO_CONTENT,
@@ -109,14 +121,19 @@ def get_scan_thumbnail(
     current_user: User = Depends(get_current_active_user),
     db: Session = Depends(get_db)
 ):
-    if size not in ["sm", "md"]:
-        raise HTTPException(status_code=400, detail="Size must be 'sm' or 'md'")
+    if size not in ["sm", "md", "lg"]:
+        raise HTTPException(status_code=400, detail="Size must be 'sm', 'md', or 'lg'")
         
     scan_service = ScanService(db)
     scan = scan_service.get_scan(scan_id, current_user.id)
     
     if not scan:
         raise HTTPException(status_code=404, detail="Scan not found")
+        
+    if size == "lg":
+        if scan.storage_path and os.path.exists(scan.storage_path):
+            return FileResponse(scan.storage_path)
+        raise HTTPException(status_code=404, detail="Image file not found")
         
     thumb_path = os.path.join("/app/uploads/thumbnails", f"{size}_{scan.stored_filename}")
     

@@ -24,11 +24,14 @@ class Settings(BaseSettings):
     AWS_REGION: str = "us-east-1"
     AWS_BUCKET_NAME: str = "visioniq-storage"
     
-    # LLM & Vision Configuration
+    
     VISION_PROVIDER: str = "gemini"
-    LLM_PROVIDER: str = "gemini"
+    LLM_PROVIDER: str = "groq"
     GOOGLE_API_KEY: str = ""
-    GEMINI_MODEL: str = "gemini-2.0-flash"
+    GEMINI_MODEL: str = "gemini-flash-latest"
+    GROQ_API_KEY: str = ""
+    GROQ_LLM_MODEL: str = "llama-3.3-70b-versatile"
+    GROQ_VISION_MODEL: str = ""
     DEFAULT_TEMPERATURE: float = 0.7
     DEFAULT_MAX_TOKENS: int = 1024
 

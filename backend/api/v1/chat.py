@@ -24,10 +24,10 @@ from services.providers.provider_factory import get_llm_provider
 
 router = APIRouter()
 
-# Dependency Injection logic (In a real app, these might be injected globally or via a container)
+
 chat_service = ChatService()
 vector_search_service = VectorSearchService()
-# Note: Providers initialized here will be shared. In production, use dependency injection frameworks.
+
 try:
     embedding_provider = SentenceTransformerEmbeddingProvider()
 except Exception as e:
@@ -112,7 +112,7 @@ async def send_message(
     current_user: User = Depends(get_current_active_user),
     db: Session = Depends(get_db)
 ):
-    # Verify conversation ownership
+    
     conv = chat_service.get_conversation(db, conversation_id, current_user.id)
     
     if not message.content:
@@ -126,13 +126,22 @@ async def send_message(
     logger.info(f"[DEBUG-TRACE] api/v1/chat.py: scan_metadata passed to RAG: {bool(scan_metadata)}")
     
     async def event_generator():
-        async for chunk in rag_service.generate_rag_response(
-            db=db,
-            conversation_id=conversation_id,
-            user_id=current_user.id,
-            user_message=message.content,
-            scan_metadata=scan_metadata
-        ):
-            yield chunk
+        try:
+            async for chunk in rag_service.generate_rag_response(
+                db=db,
+                conversation_id=conversation_id,
+                user_id=current_user.id,
+                user_message=message.content,
+                scan_metadata=scan_metadata
+            ):
+                yield chunk
+        except Exception as e:
+            from services.providers.exceptions import AIProviderError
+            if isinstance(e, AIProviderError):
+                logger.error(f"[DEBUG-TRACE] api/v1/chat.py: AIProviderError during stream: {e}")
+                yield "\n\n[System: The AI service is temporarily unavailable. Please try again shortly.]"
+            else:
+                logger.error(f"[DEBUG-TRACE] api/v1/chat.py: Unexpected error during stream: {e}")
+                yield "\n\n[System: An unexpected error occurred. Please try again shortly.]"
 
     return StreamingResponse(event_generator(), media_type="text/plain")
