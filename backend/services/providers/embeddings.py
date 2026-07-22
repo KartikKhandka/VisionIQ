@@ -10,24 +10,37 @@ class OpenAIEmbeddingProvider(EmbeddingProvider):
     def generate_embeddings(self, texts: List[str]) -> List[List[float]]:
         raise NotImplementedError("OpenAI embeddings not yet configured.")
 
+import httpx
+
 class GeminiEmbeddingProvider(EmbeddingProvider):
     def __init__(self):
-        self.client = genai.Client(api_key=settings.GOOGLE_API_KEY, http_options={'api_version': 'v1'})
-        self.model_name = "text-embedding-004"
+        self.api_key = settings.GOOGLE_API_KEY
+        self.model_name = "models/text-embedding-004"
 
     def generate_embedding(self, text: str) -> List[float]:
-        result = self.client.models.embed_content(
-            model=self.model_name,
-            contents=text,
-        )
-        return result.embeddings[0].values
+        url = f"https://generativelanguage.googleapis.com/v1beta/{self.model_name}:embedContent?key={self.api_key}"
+        payload = {
+            "model": self.model_name,
+            "content": {"parts": [{"text": text}]}
+        }
+        response = httpx.post(url, json=payload, timeout=10.0)
+        if response.status_code != 200:
+            print(f"Gemini API Error: {response.text}")
+        response.raise_for_status()
+        return response.json()["embedding"]["values"]
 
     def generate_embeddings(self, texts: List[str]) -> List[List[float]]:
-        result = self.client.models.embed_content(
-            model=self.model_name,
-            contents=texts,
-        )
-        return [embedding.values for embedding in result.embeddings]
+        url = f"https://generativelanguage.googleapis.com/v1beta/{self.model_name}:batchEmbedContents?key={self.api_key}"
+        requests = [
+            {"model": self.model_name, "content": {"parts": [{"text": t}]}}
+            for t in texts
+        ]
+        response = httpx.post(url, json={"requests": requests}, timeout=30.0)
+        if response.status_code != 200:
+            print(f"Gemini API Error: {response.text}")
+        response.raise_for_status()
+        embeddings = response.json().get("embeddings", [])
+        return [emb["values"] for emb in embeddings]
 
 class OllamaEmbeddingProvider(EmbeddingProvider):
     def generate_embedding(self, text: str) -> List[float]:
