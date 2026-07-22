@@ -161,21 +161,21 @@ class RAGService:
         # 2. Save new user message
         self.chat_service.add_message(db, conversation_id, role="user", content=user_message)
         
-        # 3. Generate embedding for the question
-        question_embedding = self.embedding_provider.generate_embedding(user_message)
-        
-        # 4. Retrieve Top-K Chunks via Vector Search (fetch more for re-ranking)
-        retrieved_chunks = self.vector_search.similarity_search(
-            db, 
-            query_embedding=question_embedding, 
-            top_k=10
-        )
-        
-        # 5. Re-rank chunks based on appliance metadata match
-        retrieved_chunks = self._rerank_chunks(retrieved_chunks, scan_metadata)
-        
-        # Take top 5 after re-ranking
-        retrieved_chunks = retrieved_chunks[:5]
+        # 3. Generate embedding for the question & retrieve Top-K Chunks
+        retrieved_chunks = []
+        if self.embedding_provider:
+            try:
+                question_embedding = self.embedding_provider.generate_embedding(user_message)
+                retrieved_chunks = self.vector_search.similarity_search(
+                    db, 
+                    query_embedding=question_embedding, 
+                    top_k=10
+                )
+                retrieved_chunks = self._rerank_chunks(retrieved_chunks, scan_metadata)
+                retrieved_chunks = retrieved_chunks[:5]
+            except Exception as e:
+                logger.warning(f"[RAGService] Knowledge embedding failed, proceeding with general LLM chat: {e}")
+                retrieved_chunks = []
         
         # Determine availability flags
         has_objects = bool(scan_metadata and scan_metadata.get("detected_objects"))
