@@ -25,8 +25,8 @@ class KnowledgeChunk(BaseModel):
     page_number = Column(Integer, nullable=True)
     text = Column(Text, nullable=False)
     
-    # 384 is default dimension for sentence-transformers all-MiniLM-L6-v2
-    embedding = Column(Vector(384))
+    # 768 is default dimension for Gemini text-embedding-004
+    embedding = Column(Vector(768))
     
     metadata_ = Column("metadata", JSON, nullable=True)
     

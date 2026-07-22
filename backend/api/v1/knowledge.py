@@ -15,7 +15,7 @@ from schemas.knowledge import (
 from services.knowledge_service import KnowledgeService
 from services.vector_search_service import VectorSearchService
 from services.chunking_service import RecursiveChunker
-from services.providers.embeddings import SentenceTransformerEmbeddingProvider
+from services.providers.embeddings import GeminiEmbeddingProvider
 import tempfile
 import os
 
@@ -26,7 +26,7 @@ vector_search_service = VectorSearchService()
 chunk_strategy = RecursiveChunker(chunk_size=1000, chunk_overlap=200)
 
 try:
-    embedding_provider = SentenceTransformerEmbeddingProvider()
+    embedding_provider = GeminiEmbeddingProvider()
 except Exception as e:
     print(f"Warning: Could not initialize embedding provider: {e}")
     embedding_provider = None

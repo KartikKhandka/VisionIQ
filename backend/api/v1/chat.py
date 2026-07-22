@@ -19,7 +19,7 @@ from schemas.chat import (
 from services.chat_service import ChatService
 from services.rag_service import RAGService
 from services.vector_search_service import VectorSearchService
-from services.providers.embeddings import SentenceTransformerEmbeddingProvider
+from services.providers.embeddings import GeminiEmbeddingProvider
 from services.providers.provider_factory import get_llm_provider
 
 router = APIRouter()
@@ -29,7 +29,7 @@ chat_service = ChatService()
 vector_search_service = VectorSearchService()
 
 try:
-    embedding_provider = SentenceTransformerEmbeddingProvider()
+    embedding_provider = GeminiEmbeddingProvider()
 except Exception as e:
     print(f"Warning: Could not initialize embedding provider: {e}")
     embedding_provider = None
