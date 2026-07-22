@@ -30,7 +30,7 @@ Built with a robust microservice-oriented architecture and a sleek, dynamic user
 
 **Frontend:** Next.js 14, React, Tailwind CSS, Radix UI, React Query, Framer Motion, Next-Themes  
 **Backend:** Python, FastAPI, SQLAlchemy (PostgreSQL + pgvector), Alembic, Pydantic, Tenacity  
-**AI & Search:** Google Gemini 2.0 (Multimodal Vision + Chat), LangChain, HuggingFace Embeddings  
+**AI & Search:** Google Gemini (Multimodal Vision), Groq (Blazing fast LLM Chat), LangChain, HuggingFace Embeddings  
 **Infrastructure:** Docker, Docker Compose, Redis
 
 ---
@@ -46,11 +46,14 @@ The entire stack is containerized with Docker for a seamless 1-click launch.
 
 2. **Configure your AI Keys** (in `.env.development`)
    ```env
-   LLM_PROVIDER=gemini
+   VISION_PROVIDER=gemini
+   LLM_PROVIDER=groq
    GOOGLE_API_KEY=your_gemini_api_key_here
-   GEMINI_MODEL=gemini-2.0-flash
+   GEMINI_MODEL=gemini-flash-latest
+   GROQ_API_KEY=your_groq_api_key_here
+   GROQ_MODEL=llama-3.3-70b-versatile
    ```
-   *Note: If no API key is provided, set `LLM_PROVIDER=mock` to run the app entirely offline with mock responses.*
+   *Note: This utilizes a hybrid architecture for completely free high-performance AI inference.*
 
 3. **Launch the platform**
    ```bash
