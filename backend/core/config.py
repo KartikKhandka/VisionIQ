@@ -37,6 +37,8 @@ class Settings(BaseSettings):
 
     @property
     def get_allowed_origins(self) -> List[str]:
+        if "*" in self.ALLOWED_ORIGINS:
+            return ["*"]
         return [origin.strip() for origin in self.ALLOWED_ORIGINS.split(",") if origin.strip()]
     
     model_config = SettingsConfigDict(
