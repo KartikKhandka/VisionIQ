@@ -35,50 +35,7 @@ Built with a robust microservice-oriented architecture and a sleek, dynamic user
 
 ---
 
-## ⚙️ Development Setup
 
-The entire stack is containerized with Docker for a seamless 1-click launch.
-
-1. **Clone the repository & setup environment files**
-   ```bash
-   cp .env.example .env.development
-   ```
-
-2. **Configure your AI Keys** (in `.env.development`)
-   ```env
-   VISION_PROVIDER=gemini
-   LLM_PROVIDER=groq
-   GOOGLE_API_KEY=your_gemini_api_key_here
-   GEMINI_MODEL=gemini-flash-latest
-   GROQ_API_KEY=your_groq_api_key_here
-   GROQ_MODEL=llama-3.3-70b-versatile
-   ```
-   *Note: This utilizes a hybrid architecture for completely free high-performance AI inference.*
-
-3. **Launch the platform**
-   ```bash
-   docker-compose up --build
-   ```
-   *The backend container will automatically wait for the database and execute all Alembic migrations.*
-
-4. **Access the services**
-   - **Frontend App**: [http://localhost:3000](http://localhost:3000)
-   - **Backend API Docs (Swagger)**: [http://localhost:8000/api/v1/docs](http://localhost:8000/api/v1/docs)
-
----
-
-## 💾 Database Migrations
-
-The database schema is managed via Alembic. 
-
-**To generate a new migration after updating SQLAlchemy models:**
-```bash
-docker-compose exec backend alembic revision --autogenerate -m "Added new feature"
-docker-compose exec backend alembic upgrade head
-```
-
-## 🤝 Contributing
-Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/your-username/visioniq/issues).
 
 ## 📝 License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
