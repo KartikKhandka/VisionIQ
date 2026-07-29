@@ -9,6 +9,9 @@ export const useScans = (skip = 0, limit = 20) => {
       const { data } = await api.get(`/scans?skip=${skip}&limit=${limit}`);
       return data;
     },
+    staleTime: 30 * 1000,
+    gcTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 };
 
