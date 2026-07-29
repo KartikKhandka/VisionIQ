@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from '@/services/api';
 import { useRouter } from 'next/navigation';
 
-export const useScans = (skip = 0, limit = 100) => {
+export const useScans = (skip = 0, limit = 20) => {
   return useQuery({
     queryKey: ['scans', skip, limit],
     queryFn: async () => {
@@ -37,7 +37,7 @@ export const useUploadScan = () => {
     mutationFn: async (file: File) => {
       const formData = new FormData();
       formData.append('file', file);
-      
+
       const { data } = await api.post('/scans/upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -54,7 +54,7 @@ export const useUploadScan = () => {
 
 export const useDeleteScan = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: async (scanId: string) => {
       await api.delete(`/scans/${scanId}`);
