@@ -19,7 +19,7 @@ const fadeUp = {
 
 export default function DashboardPage() {
   const { user } = useAuth();
-  const { data: scans, isLoading, error } = useScans(0, 100);
+  const { data: scans, isLoading, error } = useScans(0, 20);
   const [docCount, setDocCount] = useState(0);
 
   useEffect(() => {
@@ -54,7 +54,7 @@ export default function DashboardPage() {
           </span>
         </div>
         <h1 className="font-display text-[clamp(32px,5vw,56px)] font-black uppercase leading-[0.95] tracking-tight text-white mb-4">
-          Welcome back, <br/>
+          Welcome back, <br />
           <span className="text-brandAccent">{user?.full_name?.split(' ')[0] || "User"}.</span>
         </h1>
         <p className="text-white/50 text-base max-w-xl leading-relaxed">
@@ -63,7 +63,7 @@ export default function DashboardPage() {
       </motion.div>
 
       {/* Quick Actions (Cursor-like command items) */}
-      <motion.div 
+      <motion.div
         initial="hidden"
         animate="visible"
         variants={fadeUp}
@@ -103,7 +103,7 @@ export default function DashboardPage() {
               View All <ArrowRight className="w-3 h-3" />
             </Link>
           </div>
-          
+
           {isLoading ? (
             <div className="flex py-12">
               <Loader2 className="w-6 h-6 animate-spin text-brandAccent" />
@@ -144,8 +144,8 @@ export default function DashboardPage() {
                 <span className="text-sm font-bold text-brandAccent">{docCount} Docs</span>
               </div>
               <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
-                <div 
-                  className="h-full bg-brandAccent rounded-full shadow-[0_0_10px_#06b6d4] transition-all duration-1000" 
+                <div
+                  className="h-full bg-brandAccent rounded-full shadow-[0_0_10px_#06b6d4] transition-all duration-1000"
                   style={{ width: `${coveragePercent}%` }}
                 ></div>
               </div>
@@ -167,7 +167,7 @@ export default function DashboardPage() {
                         Analyzed <span className="font-bold text-white">{scan.detected_brand_id || scan.original_filename || 'Appliance'}</span>
                       </p>
                       <p className="text-xs text-white/40 mt-0.5">
-                        {new Date(scan.created_at).toLocaleDateString()} at {new Date(scan.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                        {new Date(scan.created_at).toLocaleDateString()} at {new Date(scan.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                       </p>
                     </div>
                   </div>

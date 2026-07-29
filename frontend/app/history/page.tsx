@@ -14,7 +14,7 @@ import { useSearchParams } from "next/navigation";
 function HistoryContent() {
   const searchParams = useSearchParams();
   const query = searchParams.get("q")?.toLowerCase() || "";
-  const { data: scans, isLoading, error } = useScans(0, 100);
+  const { data: scans, isLoading, error } = useScans(0, 20);
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
   const filteredScans = scans?.filter((scan: any) => {
@@ -41,7 +41,7 @@ function HistoryContent() {
             View, search, and manage all your previously analyzed images and conversations.
           </p>
         </div>
-        
+
         <div className="flex items-center gap-4">
           <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.03] border border-white/[0.05]">
             <Scan className="w-3.5 h-3.5 text-white/50" />
@@ -124,21 +124,18 @@ function HistoryContent() {
                           </div>
                         </td>
                         <td className="py-4 px-4 relative z-10 pointer-events-none">
-                          <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md border w-fit ${
-                            isCompleted ? 'bg-green-500/10 border-green-500/20' :
-                            isFailed ? 'bg-red-500/10 border-red-500/20' :
-                            'bg-brandAccent/10 border-brandAccent/20'
-                          }`}>
-                            <span className={`w-1.5 h-1.5 rounded-full ${
-                              isCompleted ? 'bg-green-400' :
-                              isFailed ? 'bg-red-400' :
-                              'bg-brandAccent animate-pulse'
-                            }`} />
-                            <span className={`text-[10px] font-bold uppercase tracking-widest ${
-                              isCompleted ? 'text-green-400' :
-                              isFailed ? 'text-red-400' :
-                              'text-brandAccent'
+                          <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md border w-fit ${isCompleted ? 'bg-green-500/10 border-green-500/20' :
+                              isFailed ? 'bg-red-500/10 border-red-500/20' :
+                                'bg-brandAccent/10 border-brandAccent/20'
                             }`}>
+                            <span className={`w-1.5 h-1.5 rounded-full ${isCompleted ? 'bg-green-400' :
+                                isFailed ? 'bg-red-400' :
+                                  'bg-brandAccent animate-pulse'
+                              }`} />
+                            <span className={`text-[10px] font-bold uppercase tracking-widest ${isCompleted ? 'text-green-400' :
+                                isFailed ? 'text-red-400' :
+                                  'text-brandAccent'
+                              }`}>
                               {scan.status}
                             </span>
                           </div>
@@ -173,10 +170,10 @@ function HistoryContent() {
         </motion.div>
       ) : (
         <div className="max-w-xl mx-auto mt-12">
-          <EmptyState 
-            icon={Scan} 
-            title={query ? "No search results" : "No scan history"} 
-            description={query ? `No scans found matching "${query}".` : "You haven't uploaded any images yet."} 
+          <EmptyState
+            icon={Scan}
+            title={query ? "No search results" : "No scan history"}
+            description={query ? `No scans found matching "${query}".` : "You haven't uploaded any images yet."}
             className="min-h-[300px] border border-dashed border-white/10 bg-white/[0.01]"
             action={
               <Link href="/upload">
